@@ -16,7 +16,7 @@ DouyinDownloader now support download douyin videos by `common url` and `account
 >
 > This feature is under development now please make sure that your have read the source code.
 
-### Development
+## ⚡️ Development
 
 ```bash
 $ git clone this repo
@@ -25,7 +25,7 @@ $ pnpm install
 $ pnpm dev -w
 ```
 
-### Build
+## 🛠 Build
 
 ```bash
 $ git clone this repo
