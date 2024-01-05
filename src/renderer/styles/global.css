@@ -1,0 +1,29 @@
+@import url(https://fonts.bunny.net/css?family=inter:400,500,600,700,800,900);
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .icon-default {
+    @apply text-foreground/50 dark:text-white/90 pointer-events-none flex-shrink-0;
+  }
+}
+
+* {
+  user-select: none;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 2px;
+  background-color: rgba(0, 0, 0, 0.2);
+}
