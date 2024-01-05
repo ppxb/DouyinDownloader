@@ -25,7 +25,8 @@ import {
   AccountIcon,
   UrlsIcon,
   HotIcon,
-  FavIcon
+  FavIcon,
+  AlbumIcon
 } from '@renderer/components/icon'
 import { extractDataFromUrls, urlPatterns } from '@renderer/utils/reg'
 
@@ -113,6 +114,13 @@ const DownloadPage = () => {
                   shortcut="Ctrl + A"
                 >
                   账号作品下载
+                </DropdownItem>
+                <DropdownItem
+                  key="Download album works"
+                  startContent={<AlbumIcon className="icon-default" />}
+                  shortcut="Ctrl + B"
+                >
+                  图集下载
                 </DropdownItem>
                 <DropdownItem
                   key="Favorite works batch download"
