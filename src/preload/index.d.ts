@@ -4,7 +4,8 @@ export interface IApi {
   setStoreValue: (name: string, value: string) => void
   getStoreValue: (name: string) => string
   removeStoreValue: (name: string) => void
-  selectDownloadDir: () => string
+  selectDownloadDir: (oldPath?: string) => Promise<string>
+  getDefaultDownloadDir: () => Promise<string>
 }
 
 declare global {

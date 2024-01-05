@@ -11,9 +11,9 @@ export const createTask = async (event: IpcMainEvent, list: ParsedItem[]) => {
 }
 
 export const handleWillDownload = (
-  event: IpcMainEvent,
+  event: any,
   item: DownloadItem,
-  webContents: WebContents
+  _: WebContents
 ) => {
   const basePath = JSON.parse(store.get('settings') as string).state.dir
   const folder = generateDatePath()
@@ -24,10 +24,10 @@ export const handleWillDownload = (
       }`
     )
 
-    item.on('updated', (e, s) => {
-      if (s === 'interrupted') {
+    item.on('updated', (_, state) => {
+      if (state === 'interrupted') {
         console.log('Download is interrupted but can be resumed')
-      } else if (s === 'progressing') {
+      } else if (state === 'progressing') {
         if (item.isPaused()) {
           console.log('Download is paused')
         } else {
@@ -36,7 +36,7 @@ export const handleWillDownload = (
       }
     })
 
-    item.once('done', (event, state) => {
+    item.once('done', (_, state) => {
       if (state === 'completed') {
         console.log('Download successfully')
       } else {

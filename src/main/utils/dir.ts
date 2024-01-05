@@ -1,16 +1,23 @@
 import fs from 'fs'
 import path from 'path'
-import { IpcMainEvent, dialog } from 'electron'
+import { app, dialog } from 'electron'
 import Store from 'electron-store'
 
 const store = new Store()
 
-export const handleSelectDownloadDir = async (_: IpcMainEvent) => {
+export const _handleDownloadDirChange = async (
+  oldPath: string = app.getPath('downloads')
+) => {
   const { canceled, filePaths } = await dialog.showOpenDialog({
-    properties: ['openDirectory']
+    title: '选择默认存储位置',
+    properties: ['openDirectory', 'createDirectory'],
+    defaultPath: oldPath
   })
-  if (canceled) return
-  _.returnValue = filePaths[0]
+  return !canceled ? filePaths[0] : oldPath
+}
+
+export const _getDefaultDownloadDir = async () => {
+  return app.getPath('downloads')
 }
 
 export const generateDatePath = () => {

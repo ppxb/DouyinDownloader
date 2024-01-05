@@ -13,8 +13,11 @@ const api: IApi = {
   removeStoreValue: (name: string) => {
     ipcRenderer.send('removeStore', name)
   },
-  selectDownloadDir: () => {
-    return ipcRenderer.sendSync('selectDownloadDir')
+  selectDownloadDir: async (oldPath?: string) => {
+    return await ipcRenderer.invoke('selectDownloadDir', oldPath)
+  },
+  getDefaultDownloadDir: async () => {
+    return await ipcRenderer.invoke('getDefaultDownloadDir')
   }
 }
 

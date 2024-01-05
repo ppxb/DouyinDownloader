@@ -32,7 +32,7 @@ const storage: StateStorage = {
 const initialState: State = {
   cookie: '',
   theme: 'light',
-  dir: './download'
+  dir: await window.api.getDefaultDownloadDir()
 }
 
 const appStore = create<State & Actions>()(

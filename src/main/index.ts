@@ -6,7 +6,7 @@ import icon from '../../resources/icon.png?asset'
 
 import { handleUrlsDownload } from './api'
 import { setStore, getStore, removeStore } from './utils/store'
-import { handleSelectDownloadDir } from './utils/dir'
+import { _getDefaultDownloadDir, _handleDownloadDirChange } from './utils/dir'
 import { handleWillDownload } from './utils/download'
 
 function createWindow(): void {
@@ -54,7 +54,10 @@ function createWindow(): void {
   ipcMain.on('removeStore', removeStore)
 
   // Dir management
-  ipcMain.on('selectDownloadDir', handleSelectDownloadDir)
+  ipcMain.handle('selectDownloadDir', (_, oldPath?: string) =>
+    _handleDownloadDirChange(oldPath)
+  )
+  ipcMain.handle('getDefaultDownloadDir', () => _getDefaultDownloadDir())
 }
 
 // This method will be called when Electron has finished

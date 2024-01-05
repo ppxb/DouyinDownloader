@@ -23,11 +23,12 @@ const SettingsView = () => {
   const [languageValue, setLanguageValue] = useState<Selection>(
     new Set(['简体中文'])
   )
-  const { cookie, updateCookie, dir } = useAppStore.use
+  const { cookie, updateCookie } = useAppStore.use
+  const dir = useAppStore.use.dir()
   const updateDir = useAppStore.use.updateDir()
 
-  const handleSelectDownloadDir = () => {
-    const path = window.api.selectDownloadDir()
+  const handleSelectDownloadDir = async () => {
+    const path = await window.api.selectDownloadDir(dir)
     updateDir(path)
   }
 
@@ -229,7 +230,7 @@ const SettingsView = () => {
               </div>
             </div>
             <div className="flex ml-auto gap-2">
-              <Tooltip content={dir()} delay={0} closeDelay={0}>
+              <Tooltip content={dir} delay={0} closeDelay={0}>
                 <Input
                   disabled
                   size="sm"
@@ -256,7 +257,7 @@ const SettingsView = () => {
                       '!cursor-text'
                     ]
                   }}
-                  value={dir()}
+                  value={dir}
                 />
               </Tooltip>
 
