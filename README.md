@@ -1,28 +1,37 @@
-# tiktok-down
+# DouyinDownloader
 
-An Electron application with React and TypeScript
+A Cross-platform Douyin(Tiktok) downloader based on electron and react.
 
-## Recommended IDE Setup
+## 👋🏻 Getting Started
 
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+Please be aware that DouyinDownloader is currently under active development, and feedback is welcome for any issues encountered.
 
-## Project Setup
+## ✨ Features
 
-### Install
+#### `1` Douyin Video Batch Download
 
-```bash
-$ pnpm install
-```
+DouyinDownloader now support download douyin videos by `common url` and `account's content url` by a easy way with GUI.
+
+> \[!NOTE]
+>
+> This feature is under development now please make sure that your have read the source code.
 
 ### Development
 
 ```bash
-$ pnpm dev
+$ git clone this repo
+$ cd the repo
+$ pnpm install
+$ pnpm dev -w
 ```
 
 ### Build
 
 ```bash
+$ git clone this repo
+$ cd the repo
+$ pnpm install
+
 # For windows
 $ pnpm build:win
 
@@ -31,4 +40,5 @@ $ pnpm build:mac
 
 # For Linux
 $ pnpm build:linux
+
 ```
