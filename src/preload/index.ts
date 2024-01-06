@@ -4,21 +4,19 @@ import { electronAPI } from '@electron-toolkit/preload'
 import { IApi } from './index.d'
 
 const api: IApi = {
-  setStoreValue: (name: string, value: string) => {
-    ipcRenderer.send('setStore', name, value)
-  },
+  setStoreValue: (name: string, value: string) =>
+    ipcRenderer.send('setStore', name, value),
   getStoreValue: (name: string) => {
     return ipcRenderer.sendSync('getStore', name)
   },
-  removeStoreValue: (name: string) => {
-    ipcRenderer.send('removeStore', name)
-  },
+  removeStoreValue: (name: string) => ipcRenderer.send('removeStore', name),
   selectDownloadDir: async (oldPath?: string) => {
     return await ipcRenderer.invoke('selectDownloadDir', oldPath)
   },
   getDefaultDownloadDir: async () => {
     return await ipcRenderer.invoke('getDefaultDownloadDir')
-  }
+  },
+  openGithub: () => ipcRenderer.send('openGithub')
 }
 
 if (process.contextIsolated) {

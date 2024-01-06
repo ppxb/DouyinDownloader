@@ -8,6 +8,7 @@ import { handleUrlsDownload } from './api'
 import { setStore, getStore, removeStore } from './utils/store'
 import { _getDefaultDownloadDir, _handleDownloadDirChange } from './utils/dir'
 import { handleWillDownload } from './utils/download'
+import { handleOpenGithub } from './utils/url'
 
 function createWindow(): void {
   const mainWindow = new BrowserWindow({
@@ -47,6 +48,8 @@ function createWindow(): void {
   mainWindow.webContents.session.on('will-download', handleWillDownload)
 
   ipcMain.on('urlsDownload', handleUrlsDownload)
+
+  ipcMain.on('openGithub', handleOpenGithub)
 
   // Store management
   ipcMain.on('setStore', setStore)

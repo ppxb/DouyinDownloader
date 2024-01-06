@@ -21,12 +21,12 @@ import hotKeys from 'hotkeys-js'
 import { toast } from 'sonner'
 
 import {
-  DownloadIcon,
   AccountIcon,
   UrlsIcon,
   HotIcon,
   FavIcon,
-  AlbumIcon
+  AlbumIcon,
+  NewIcon
 } from '@renderer/components/icon'
 import { extractDataFromUrls, urlPatterns } from '@renderer/utils/reg'
 
@@ -92,7 +92,7 @@ const DownloadPage = () => {
           <Dropdown>
             <DropdownTrigger>
               <Button isIconOnly radius="lg" variant="flat">
-                <DownloadIcon />
+                <NewIcon />
               </Button>
             </DropdownTrigger>
             <DropdownMenu
