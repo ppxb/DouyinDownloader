@@ -1,22 +1,29 @@
 # DouyinDownloader
 
-A Cross-platform Douyin(Tiktok) downloader based on electron and react.
+一款跨平台的抖音下载器GUI，支持抖音无水印视频批量下载，基于Electon和React开发。
 
-## 👋🏻 Getting Started
+## 👋🏻 快速开始
 
-Please be aware that DouyinDownloader is currently under active development, and feedback is welcome for any issues encountered.
+请注意，DouyinDownloader目前正在积极开发中，遇到任何问题欢迎反馈及提交Issue。
 
-## ✨ Features
+## ✨ 功能
 
-#### `1` Douyin Video Batch Download
+#### `1` 抖音无水印视频批量下载
 
-DouyinDownloader now support download douyin videos by `common url` and `account's content url` by a easy way with GUI.
+DouyinDownloader 现在支持通过简单的GUI交互下载抖音无水印视频。
 
-> \[!NOTE]
+|                                                     链接形式                                                     | 是否支持 |
+| :--------------------------------------------------------------------------------------------------------------: | :------: |
+|                           https://www.douyin.com/discover?modal_id=7317901979785694475                           |    ✅    |
+| https://www.douyin.com/user/MS4wLjABAAAASVa-8R_3SGeSaJudPW8WD-cUJVqxnvFtcPjH66IESVo?modal_id=7286026282956000575 |    ✅    |
+
+|链接形式|
+
+> \[!注意]
 >
-> This feature is under development now please make sure that your have read the source code.
+> 此功能正在开发中，请确保您已阅读源代码以了解如何使用。
 
-### Development
+### 开发
 
 ```bash
 $ git clone this repo
@@ -25,7 +32,7 @@ $ pnpm install
 $ pnpm dev -w
 ```
 
-### Build
+### 构建
 
 ```bash
 $ git clone this repo
@@ -42,3 +49,7 @@ $ pnpm build:mac
 $ pnpm build:linux
 
 ```
+
+### 📃 License
+
+MIT © [ppxb](https://github.com/ppxb/DouyinDownloader/blob/main/LICENSE)
