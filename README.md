@@ -15,7 +15,7 @@ DouyinDownloader 现在支持通过简单的GUI交互下载抖音无水印视频
 |                                                     链接形式                                                     | 是否支持 |
 | :--------------------------------------------------------------------------------------------------------------: | :------: |
 |                           https://www.douyin.com/discover?modal_id=7317901979785694475                           |    ✅    |
-| https://www.douyin.com/user/MS4wLjABAAAASVa-8R_3SGeSaJudPW8WD-cUJVqxnvFtcPjH66IESVo?modal_id=7286026282956000575 |    ✅    |
+| https://www.douyin.com/user/xxxxxxxxx?modal_id=7286026282956000575 |    ✅    |
 
 
 > \[!Note]
@@ -51,4 +51,4 @@ $ pnpm build:linux
 
 ## 📃 License
 
-MIT © [ppxb](https://github.com/ppxb/DouyinDownloader/blob/main/LICENSE)
+MIT © [ppxb](https://github.com/ppxb/DouyinDownloader/blob/master/LICENSE)
