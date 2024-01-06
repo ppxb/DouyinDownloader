@@ -8,6 +8,10 @@
   .icon-default {
     @apply text-foreground/50 dark:text-white/90 pointer-events-none flex-shrink-0;
   }
+
+  .input-default {
+    @apply bg-transparent text-black/90 dark:text-white/90 placeholder:text-default-700/50 dark:placeholder:text-white/60;
+  }
 }
 
 * {

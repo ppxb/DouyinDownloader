@@ -12,7 +12,7 @@ const Layout = () => {
           className: 'font-sans'
         }}
       />
-      <div className="flex flex-col items-center justify-center w-20 gap-2 bg-default-100">
+      <div className="flex flex-col items-center justify-center w-16 gap-2 bg-default-100">
         <Tooltip content="下载" placement="right">
           <Button isIconOnly as={Link} href="/" variant="light">
             <DownloadIcon />
