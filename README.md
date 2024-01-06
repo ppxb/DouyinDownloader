@@ -32,7 +32,7 @@ $ pnpm install
 $ pnpm dev -w
 ```
 
-### 构建
+### Build
 
 ```bash
 $ git clone this repo
