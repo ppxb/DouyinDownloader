@@ -13,9 +13,7 @@ import {
   Card,
   CardBody,
   Tooltip,
-  Avatar,
-  Image,
-  ScrollShadow
+  Image
 } from '@nextui-org/react'
 
 import { extractDataFromUrls, urlPatterns } from '@renderer/utils/reg'
@@ -104,9 +102,11 @@ const UrlsModal = ({ isOpen, onClose }: Props) => {
               />
             </Tab>
             <Tab key="preview">
-              <div className="flex flex-col items-center justify-center min-h-80">
+              <div className="flex flex-col items-center justify-center">
                 <div className="text-tiny self-start text-foreground-400 mb-4">
-                  共检测到 {list.length} 个视频
+                  {list.length > 0
+                    ? `共检测到 ${list.length} 个视频`
+                    : '检测中，请稍等'}
                 </div>
                 {list.length === 0 ? (
                   <Spinner />
