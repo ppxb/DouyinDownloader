@@ -17,13 +17,12 @@ DouyinDownloader 现在支持通过简单的GUI交互下载抖音无水印视频
 |                           https://www.douyin.com/discover?modal_id=7317901979785694475                           |    ✅    |
 | https://www.douyin.com/user/MS4wLjABAAAASVa-8R_3SGeSaJudPW8WD-cUJVqxnvFtcPjH66IESVo?modal_id=7286026282956000575 |    ✅    |
 
-|链接形式|
 
-> \[!注意]
+> \[!Note]
 >
 > 此功能正在开发中，请确保您已阅读源代码以了解如何使用。
 
-### 开发
+## ⚡️ 开发
 
 ```bash
 $ git clone this repo
@@ -32,7 +31,7 @@ $ pnpm install
 $ pnpm dev -w
 ```
 
-### Build
+## 🛠 构建
 
 ```bash
 $ git clone this repo
@@ -50,6 +49,6 @@ $ pnpm build:linux
 
 ```
 
-### 📃 License
+## 📃 License
 
 MIT © [ppxb](https://github.com/ppxb/DouyinDownloader/blob/main/LICENSE)
