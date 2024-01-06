@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useCallback } from 'react'
+import { useEffect } from 'react'
 import {
   Card,
   CardHeader,
@@ -10,12 +10,8 @@ import {
   DropdownMenu,
   DropdownSection,
   useDisclosure,
-  Modal,
-  ModalContent,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-  Textarea
+  Tabs,
+  Tab
 } from '@nextui-org/react'
 import hotKeys from 'hotkeys-js'
 import { toast } from 'sonner'
@@ -28,34 +24,16 @@ import {
   AlbumIcon,
   NewIcon
 } from '@renderer/components/icon'
-import { extractDataFromUrls, urlPatterns } from '@renderer/utils/reg'
+import UrlsModal from './urlsModal'
 
 const DownloadPage = () => {
-  const [urls, setUrls] = useState('')
-  const urlsDownloadModal = useDisclosure()
-
-  const handleCancel = useCallback(() => {
-    setUrls('')
-    urlsDownloadModal.onClose()
-  }, [])
-
-  const handleStart = () => {
-    if (urls.length === 0) return
-    urlsDownloadModal.onClose()
-    const ids = extractDataFromUrls([...new Set(urls.split('\n'))], urlPatterns)
-    window.electron.ipcRenderer.send('urlsDownload', ids)
-  }
-
-  const filterdUrls = useMemo(
-    () => urls.split('\n').filter(i => i !== ''),
-    [urls]
-  )
+  const urlsModal = useDisclosure()
 
   useEffect(() => {
     hotKeys('ctrl+n', (_, handler) => {
       switch (handler.key) {
         case 'ctrl+n':
-          urlsDownloadModal.onOpen()
+          urlsModal.onOpen()
           break
       }
     })
@@ -83,11 +61,15 @@ const DownloadPage = () => {
         <div className="felx flex-col">
           <div className="text-2xl font-bold mb-1">下载</div>
           <div className="text-tiny text-foreground/50">
-            在此处开始新的下载任务以及查看下载任务
+            开始新的下载任务以及查看下载任务
           </div>
         </div>
       </CardHeader>
       <CardBody className="px-5 py-4">
+        <Tabs size="sm">
+          <Tab>下载中</Tab>
+          <Tab>已完成</Tab>
+        </Tabs>
         <div className="absolute right-14 bottom-14">
           <Dropdown>
             <DropdownTrigger>
@@ -104,7 +86,7 @@ const DownloadPage = () => {
                   key="Urls download"
                   startContent={<UrlsIcon className="icon-default" />}
                   shortcut="Ctrl + N"
-                  onPress={urlsDownloadModal.onOpen}
+                  onPress={urlsModal.onOpen}
                 >
                   链接下载
                 </DropdownItem>
@@ -142,47 +124,7 @@ const DownloadPage = () => {
         </div>
       </CardBody>
 
-      <Modal
-        backdrop="blur"
-        size="2xl"
-        radius="lg"
-        isOpen={urlsDownloadModal.isOpen}
-        onClose={urlsDownloadModal.onClose}
-      >
-        <ModalContent>
-          <ModalHeader>开始新的链接下载任务</ModalHeader>
-          <ModalBody>
-            <Textarea
-              label="请输入单个或多个下载链接，换行以进行分隔"
-              description={`共 ${filterdUrls.length} 个链接，其中共 ${
-                [...new Set(filterdUrls)].length
-              } 个非重复项`}
-              spellCheck="false"
-              minRows={5}
-              maxRows={15}
-              value={urls}
-              onValueChange={setUrls}
-              classNames={{
-                input: 'break-all',
-                description: 'mt-2'
-              }}
-            />
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              radius="lg"
-              color="danger"
-              variant="light"
-              onPress={handleCancel}
-            >
-              取消
-            </Button>
-            <Button radius="lg" color="primary" onPress={handleStart}>
-              开始
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <UrlsModal isOpen={urlsModal.isOpen} onClose={urlsModal.onClose} />
     </Card>
   )
 }

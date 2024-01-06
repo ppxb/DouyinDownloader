@@ -55,7 +55,7 @@ const SettingsView = () => {
       <CardHeader className="flex pt-10 px-8 sticky z-40 top-0 mb-2 backdrop-blur-lg">
         <div className="felx flex-col">
           <div className="text-2xl font-bold mb-1">设置</div>
-          <div className="text-tiny text-foreground/50">在此处进行全局设置</div>
+          <div className="text-tiny text-foreground/50">进行全局设置</div>
         </div>
       </CardHeader>
       <CardBody className="px-5 py-4">

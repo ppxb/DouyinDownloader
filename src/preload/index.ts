@@ -2,6 +2,7 @@ import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
 import { IApi } from './index.d'
+import { ExtractedData } from '../main/api'
 
 const api: IApi = {
   setStoreValue: (name: string, value: string) =>
@@ -16,7 +17,10 @@ const api: IApi = {
   getDefaultDownloadDir: async () => {
     return await ipcRenderer.invoke('getDefaultDownloadDir')
   },
-  openGithub: () => ipcRenderer.send('openGithub')
+  openGithub: () => ipcRenderer.send('openGithub'),
+  getPreview: async (data: ExtractedData[]) => {
+    return await ipcRenderer.invoke('getPreview', data)
+  }
 }
 
 if (process.contextIsolated) {

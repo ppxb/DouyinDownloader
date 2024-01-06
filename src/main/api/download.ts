@@ -1,14 +1,31 @@
-import { IpcMainEvent } from 'electron'
+import { IpcMainEvent, IpcMainInvokeEvent } from 'electron'
 
 import request, { RequestEnum } from './request'
-import { parseList } from '../utils/data'
+import { parseVideoList } from '../utils/data'
 import { createTask } from '../utils/download'
+import { ParsedVideoItem } from '../common/types'
 
 const BASE_DETAIL_URL = 'https://www.douyin.com/aweme/v1/web/aweme/detail'
 
-interface ExtractedData {
+export interface ExtractedData {
   name: string
   id: string
+}
+
+export const _handleDownloadPreview = async (
+  event: IpcMainInvokeEvent,
+  data: ExtractedData[]
+) => {
+  try {
+    const details = await getDetails(data)
+    const list = parseVideoList(
+      details as PromiseFulfilledResult<ParsedVideoItem>[]
+    )
+    return list
+  } catch (error) {
+    event.sender.send('downloadError', (error as Error).message)
+    return []
+  }
 }
 
 export const handleUrlsDownload = async (
@@ -17,8 +34,8 @@ export const handleUrlsDownload = async (
 ) => {
   if (data.length === 0) return
   try {
-    const list = parseList(
-      (await getDetail(data)) as PromiseFulfilledResult<any>[]
+    const list = parseVideoList(
+      (await getDetails(data)) as PromiseFulfilledResult<any>[]
     )
     createTask(event, list)
   } catch (error) {
@@ -26,7 +43,7 @@ export const handleUrlsDownload = async (
   }
 }
 
-const getDetail = (data: ExtractedData[]) => {
+const getDetails = (data: ExtractedData[]) => {
   const params = {
     device_platform: 'webapp',
     aid: '6383',

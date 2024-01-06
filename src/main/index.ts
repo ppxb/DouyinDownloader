@@ -4,7 +4,11 @@ import { join } from 'path'
 
 import icon from '../../resources/icon.png?asset'
 
-import { handleUrlsDownload } from './api'
+import {
+  ExtractedData,
+  _handleDownloadPreview,
+  handleUrlsDownload
+} from './api'
 import { setStore, getStore, removeStore } from './utils/store'
 import { _getDefaultDownloadDir, _handleDownloadDirChange } from './utils/dir'
 import { handleWillDownload } from './utils/download'
@@ -48,6 +52,10 @@ function createWindow(): void {
   mainWindow.webContents.session.on('will-download', handleWillDownload)
 
   ipcMain.on('urlsDownload', handleUrlsDownload)
+
+  ipcMain.handle('getPreview', (event, data: ExtractedData[]) =>
+    _handleDownloadPreview(event, data)
+  )
 
   ipcMain.on('openGithub', handleOpenGithub)
 

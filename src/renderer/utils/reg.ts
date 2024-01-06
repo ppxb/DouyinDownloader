@@ -18,7 +18,7 @@ export const extractDataFromUrls = (
         return { name, id: match.at(-1)! }
       }
     }
-    return { name: 'unkown', id: '' }
+    return { name: 'unknown', id: '' }
   })
 }
 
