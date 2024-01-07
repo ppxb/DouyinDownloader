@@ -1,8 +1,11 @@
 {
   "extends": "@electron-toolkit/tsconfig/tsconfig.node.json",
-  "include": ["electron.vite.config.*", "src/main/**/*", "src/preload/*"],
+  "include": ["electron.vite.config.*", "src/main/**/*", "src/preload/*","src/types/*"],
   "compilerOptions": {
     "composite": true,
     "types": ["electron-vite/node"],
+    "paths": {
+      "@common/*":["src/common/*"]
+    }
   }
 }
