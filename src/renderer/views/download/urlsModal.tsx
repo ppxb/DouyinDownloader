@@ -18,7 +18,9 @@ import {
 
 import { extractDataFromUrls, urlPatterns } from '@renderer/utils/reg'
 import { formatTime, formatSize } from '@renderer/utils/video'
-import { ParsedVideoItem } from 'src/main/common/types'
+
+import { IpcEvents } from '@common/ipcEvents'
+import { AppParsedVideo } from '@common/types'
 
 interface Props {
   isOpen: boolean
@@ -27,7 +29,7 @@ interface Props {
 
 const UrlsModal = ({ isOpen, onClose }: Props) => {
   const [urls, setUrls] = useState('')
-  const [list, setList] = useState<ParsedVideoItem[]>([])
+  const [list, setList] = useState<AppParsedVideo[]>([])
   const [selected, setSelected] = useState('input')
 
   const filterdUrls = useMemo(
@@ -50,10 +52,16 @@ const UrlsModal = ({ isOpen, onClose }: Props) => {
       const ids = extractDataFromUrls(
         [...new Set(urls.split('\n'))],
         urlPatterns
-      ).filter(i => i.name !== 'unknown')
-      const res = await window.api.getPreview(ids)
+      ).filter(i => i.type !== 'unknown')
+      const res = await window.electron.ipcRenderer.invoke(
+        IpcEvents.APP_ASSET_PREVIEW,
+        ids
+      )
       setList(res)
     } else {
+      if (list.length > 0) {
+        window.electron.ipcRenderer.send(IpcEvents.APP_NEW_DOWNLOAD, list)
+      }
       resetModal()
     }
   }

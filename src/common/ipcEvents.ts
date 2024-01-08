@@ -4,7 +4,9 @@ export enum IpcEvents {
   APP_DELETE_STORE = 'app:delete-store',
 
   APP_OPEN_GITHUB = 'app:open-github',
-
   APP_DEFAULT_DOWNLOAD_DIRECTORY = 'app:default-download-directory',
-  APP_SET_DOWNLOAD_DIRECTORY = 'app:set-download-directory'
+  APP_SET_DOWNLOAD_DIRECTORY = 'app:set-download-directory',
+
+  APP_ASSET_PREVIEW = 'app:asset-preview',
+  APP_NEW_DOWNLOAD = 'app:new-download'
 }

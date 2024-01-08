@@ -21,6 +21,14 @@ DouyinDownloader 现在支持通过简单的GUI交互下载抖音无水印视频
 >
 > 此功能正在开发中，请确保您已阅读源代码以了解如何使用。
 
+> \[!TIP]
+>
+> DouyinDownloader 支持全局快捷键。
+>
+> |     功能     |   快捷键   |
+> | :----------: | :--------: |
+> | 新建链接下载 | `CTRL + N` |
+
 主界面
 
 ![主界面](https://github.com/ppxb/DouyinDownloader/blob/master/screenshots/mainwindow.png?raw=true)

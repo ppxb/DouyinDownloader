@@ -27,7 +27,7 @@ const Layout = () => {
           <Button
             isIconOnly
             variant="light"
-            onPress={() => window.api.openGithub()}
+            onPress={() => window.electron.ipcRenderer.send('app:open-github')}
           >
             <InfoIcon />
           </Button>

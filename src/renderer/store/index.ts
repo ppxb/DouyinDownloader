@@ -71,7 +71,7 @@ const appStore = create<State & Actions>()(
       reset: () => set(initialState)
     }),
     {
-      name: 'settings',
+      name: 'app',
       storage: createJSONStorage(() => storage),
       version: 0,
       migrate: (persistedState: any, version) => {

@@ -13,10 +13,10 @@ const createInstance = () => {
 
   instance.interceptors.request.use(
     async config => {
-      const settings = store.get('settings')
-      if (!settings) throw new Error('未找到 Cookie,请前往设置页面配置 Cookie')
+      const app = store.get('app')
+      if (!app) throw new Error('未找到 Cookie,请前往设置页面配置 Cookie')
 
-      const { cookie } = JSON.parse(settings as string).state
+      const { cookie } = JSON.parse(app as string).state
       if (!cookie) throw new Error('未找到 Cookie,请前往设置页面配置 Cookie')
 
       if (cookie && !config.headers.Cookie) config.headers.Cookie = cookie

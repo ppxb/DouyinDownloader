@@ -2,7 +2,6 @@ import {
   app,
   shell,
   BrowserWindow,
-  ipcMain,
   BrowserWindowConstructorOptions
 } from 'electron'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
@@ -11,14 +10,6 @@ import { join } from 'path'
 import icon from '../../resources/icon.png?asset'
 
 import { registerIpc } from './ipc'
-
-import {
-  ExtractedData,
-  _handleDownloadPreview,
-  handleUrlsDownload
-} from './api'
-import { _getDefaultDownloadDir, _handleDownloadDirChange } from './utils/dir'
-import { handleWillDownload } from './utils/download'
 
 let mainWindow: BrowserWindow | null
 
@@ -58,14 +49,6 @@ const createWindow = () => {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
-
-  mainWindow.webContents.session.on('will-download', handleWillDownload)
-
-  ipcMain.on('urlsDownload', handleUrlsDownload)
-
-  ipcMain.handle('getPreview', (event, data: ExtractedData[]) =>
-    _handleDownloadPreview(event, data)
-  )
 }
 
 const initApp = () => {

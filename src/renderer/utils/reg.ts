@@ -3,7 +3,7 @@ export type PatternMap = {
 }
 
 export type ExtractedData = {
-  name: string
+  type: string
   id: string
 }
 
@@ -15,10 +15,10 @@ export const extractDataFromUrls = (
     for (const [name, pattern] of Object.entries(patterns)) {
       const match = pattern.exec(url)
       if (match && match.at(-1)) {
-        return { name, id: match.at(-1)! }
+        return { type: name, id: match.at(-1)! }
       }
     }
-    return { name: 'unknown', id: '' }
+    return { type: 'unknown', id: '' }
   })
 }
 

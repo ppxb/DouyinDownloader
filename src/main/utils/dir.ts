@@ -25,8 +25,8 @@ export const generateDatePath = () => {
 }
 
 export const createDir = (folder: string) => {
-  const settings = JSON.parse(store.get('settings') as string)
-  const dir = path.join(settings.state.dir, folder)
+  const app = JSON.parse(store.get('app') as string)
+  const dir = path.join(app.state.dir, folder)
 
   try {
     fs.mkdirSync(dir, { recursive: true })

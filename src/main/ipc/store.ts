@@ -1,7 +1,9 @@
 import { IpcMainEvent, IpcMainInvokeEvent, ipcMain } from 'electron'
+import Store from 'electron-store'
 
 import { IpcEvents } from '../../common/ipcEvents'
-import { EntityName, store } from '../store'
+
+export const store = new Store()
 
 export const registerStoreIpc = () => {
   ipcMain.on(
@@ -14,7 +16,7 @@ export const registerStoreIpc = () => {
     (_: IpcMainInvokeEvent, name: string) => store.get(name)
   )
 
-  ipcMain.on(IpcEvents.APP_DELETE_STORE, (_: IpcMainEvent, name: EntityName) =>
+  ipcMain.on(IpcEvents.APP_DELETE_STORE, (_: IpcMainEvent, name: string) =>
     store.delete(name)
   )
 }
