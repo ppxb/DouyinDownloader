@@ -15,6 +15,8 @@ import {
 import useAppStore, { Language, Quality, Theme } from '@renderer/store'
 import { ReloadIcon, KeyIcon, FolderIcon } from '@renderer/components/icon'
 
+import { IpcEvents } from '@common/ipcEvents'
+
 const SettingsView = () => {
   const themeList = ['light', 'dark', 'system']
   const languageList = ['简体中文', '繁體中文', 'English']
@@ -38,8 +40,14 @@ const SettingsView = () => {
   const updateLanguage = useAppStore.use.updateLanguage()
   const updateTheme = useAppStore.use.updateTheme()
 
-  const handleSelectDownloadDirChange = async () =>
-    updateDir(await window.api.selectDownloadDir(dir))
+  const handleSelectDownloadDirChange = async () => {
+    updateDir(
+      await window.electron.ipcRenderer.invoke(
+        IpcEvents.APP_SET_DOWNLOAD_DIRECTORY,
+        dir
+      )
+    )
+  }
 
   const handleQualityChange = (e: ChangeEvent<HTMLSelectElement>) =>
     updateQuality(e.target.value as Quality)

@@ -1,6 +1,6 @@
 # DouyinDownloader
 
-一款跨平台的抖音下载器GUI，支持抖音无水印视频批量下载，基于Electon和React开发。
+一款跨平台的抖音下载器GUI，支持抖音无水印视频批量下载，基于Electron和React开发。
 
 ## 👋🏻 快速开始
 

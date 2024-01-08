@@ -4,8 +4,5 @@
   "compilerOptions": {
     "composite": true,
     "types": ["electron-vite/node"],
-    "paths": {
-      "@common/*":["src/common/*"]
-    }
   }
 }

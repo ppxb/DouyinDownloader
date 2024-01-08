@@ -10,15 +10,15 @@ import { join } from 'path'
 
 import icon from '../../resources/icon.png?asset'
 
+import { registerIpc } from './ipc'
+
 import {
   ExtractedData,
   _handleDownloadPreview,
   handleUrlsDownload
 } from './api'
-import { setStore, getStore, removeStore } from './utils/store'
 import { _getDefaultDownloadDir, _handleDownloadDirChange } from './utils/dir'
 import { handleWillDownload } from './utils/download'
-import { handleOpenGithub } from './utils/url'
 
 let mainWindow: BrowserWindow | null
 
@@ -66,19 +66,6 @@ const createWindow = () => {
   ipcMain.handle('getPreview', (event, data: ExtractedData[]) =>
     _handleDownloadPreview(event, data)
   )
-
-  ipcMain.on('openGithub', handleOpenGithub)
-
-  // Store management
-  ipcMain.on('setStore', setStore)
-  ipcMain.on('getStore', getStore)
-  ipcMain.on('removeStore', removeStore)
-
-  // Dir management
-  ipcMain.handle('selectDownloadDir', (_, oldPath?: string) =>
-    _handleDownloadDirChange(oldPath)
-  )
-  ipcMain.handle('getDefaultDownloadDir', () => _getDefaultDownloadDir())
 }
 
 const initApp = () => {
@@ -104,6 +91,8 @@ const initApp = () => {
 
     // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils#optimizer
     // optimizer.registerFramelessWindowIpc()
+
+    registerIpc()
 
     createWindow()
 

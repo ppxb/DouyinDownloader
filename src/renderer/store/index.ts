@@ -1,6 +1,8 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist, StateStorage } from 'zustand/middleware'
 
+import { IpcEvents } from '@common/ipcEvents'
+
 import createSelectors from './selectors'
 
 export type Theme = 'light' | 'dark' | 'system'
@@ -28,14 +30,17 @@ type Actions = {
 }
 
 const storage: StateStorage = {
-  getItem: (name: string): string => {
-    return window.api.getStoreValue(name)
-  },
   setItem: (name: string, value: string) => {
-    window.api.setStoreValue(name, value)
+    window.electron.ipcRenderer.send(IpcEvents.APP_SET_STORE, name, value)
+  },
+  getItem: async (name: string) => {
+    return await window.electron.ipcRenderer.invoke(
+      IpcEvents.APP_GET_STORE,
+      name
+    )
   },
   removeItem: (name: string) => {
-    window.api.removeStoreValue(name)
+    window.electron.ipcRenderer.send(IpcEvents.APP_DELETE_STORE, name)
   }
 }
 
@@ -43,7 +48,9 @@ const initialState: State = {
   cookie: '',
   theme: 'light',
   language: '简体中文',
-  dir: await window.api.getDefaultDownloadDir(),
+  dir: await window.electron.ipcRenderer.invoke(
+    IpcEvents.APP_DEFAULT_DOWNLOAD_DIRECTORY
+  ),
   quality: '1080P',
   folderNameFormat: '{date}',
   fileNameFormat: '{author}-{title}-{time}'
