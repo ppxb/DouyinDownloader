@@ -40,7 +40,7 @@ export const _handleGetVideoDownloadData = async (
   }
 }
 
-const fetchVideoData = (data: IVideoPatternItem[]) => {
+const fetchVideoData = (items: IVideoPatternItem[]) => {
   const params = {
     device_platform: 'webapp',
     aid: '6383',
@@ -53,12 +53,12 @@ const fetchVideoData = (data: IVideoPatternItem[]) => {
     downlink: '10'
   }
   return Promise.all(
-    data.map(
-      async url =>
+    items.map(
+      async i =>
         await request({
           baseURL: DOUYIN_DETAIL_ENTRY,
           method: RequestEnum.GET,
-          params: { ...params, aweme_id: url.id }
+          params: { ...params, aweme_id: i.id }
         })
     )
   )

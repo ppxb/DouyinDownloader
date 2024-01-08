@@ -9,7 +9,7 @@ import {
 
 import { IpcEvents } from '../../common/ipcEvents'
 import {
-  AppVideoPatternItem,
+  IVideoPatternItem,
   IDownloadFile,
   INewDownloadFile
 } from '../../common/types'
@@ -31,7 +31,7 @@ const tempDownloadItemIds: string[] = []
 export const registerDownloadIpc = () => {
   ipcMain.handle(
     IpcEvents.APP_GET_VIDEO_DOWNLOAD_DATA,
-    (event: IpcMainInvokeEvent, items: AppVideoPatternItem[]) =>
+    (event: IpcMainInvokeEvent, items: IVideoPatternItem[]) =>
       _handleGetVideoDownloadData(event, items)
   )
 

@@ -1,4 +1,4 @@
-import { AppVideoPatternItem } from '@common/types'
+import { IVideoPatternItem } from '@common/types'
 
 export type PatternMap = {
   [key: string]: RegExp
@@ -12,7 +12,7 @@ export type ExtractedData = {
 export const extractDataFromUrls = (
   urls: string[],
   patterns: PatternMap
-): AppVideoPatternItem[] => {
+): IVideoPatternItem[] => {
   return urls.map(url => {
     for (const [name, pattern] of Object.entries(patterns)) {
       const match = pattern.exec(url)
