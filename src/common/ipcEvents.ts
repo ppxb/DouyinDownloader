@@ -8,5 +8,7 @@ export enum IpcEvents {
   APP_SET_DOWNLOAD_DIRECTORY = 'app:set-download-directory',
 
   APP_ASSET_PREVIEW = 'app:asset-preview',
-  APP_NEW_DOWNLOAD = 'app:new-download'
+  APP_NEW_DOWNLOAD = 'app:new-download',
+
+  APP_GET_VIDEO_DOWNLOAD_DATA = 'app:get-video-download-data'
 }

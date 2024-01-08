@@ -16,20 +16,22 @@ import {
   Image
 } from '@nextui-org/react'
 
+import { getVideoDownloadData } from '@renderer/ipc'
 import { extractDataFromUrls, urlPatterns } from '@renderer/utils/reg'
 import { formatTime, formatSize } from '@renderer/utils/video'
 
 import { IpcEvents } from '@common/ipcEvents'
-import { AppParsedVideo } from '@common/types'
+import { IVideoDownloadFilePreview } from '@common/types'
+import { toast } from 'sonner'
 
 interface Props {
   isOpen: boolean
   onClose: () => void
 }
 
-const UrlsModal = ({ isOpen, onClose }: Props) => {
+const UrlsDownloadModal = ({ isOpen, onClose }: Props) => {
   const [urls, setUrls] = useState('')
-  const [list, setList] = useState<AppParsedVideo[]>([])
+  const [list, setList] = useState<IVideoDownloadFilePreview[]>([])
   const [selected, setSelected] = useState('input')
 
   const filterdUrls = useMemo(
@@ -48,15 +50,24 @@ const UrlsModal = ({ isOpen, onClose }: Props) => {
 
   const handleNextClick = async () => {
     if (selected === 'input' && urls.length > 0) {
-      setSelected('preview')
       const ids = extractDataFromUrls(
         [...new Set(urls.split('\n'))],
         urlPatterns
       ).filter(i => i.type !== 'unknown')
-      const res = await window.electron.ipcRenderer.invoke(
-        IpcEvents.APP_ASSET_PREVIEW,
-        ids
-      )
+      if (ids.length === 0) {
+        toast('无效的下载链接', {
+          position: 'top-center',
+          description: '请检查您输入的链接是否正确',
+          duration: 2000,
+          classNames: {
+            title: '!text-sm !font-bold',
+            description: '!text-xs'
+          }
+        })
+        return
+      }
+      setSelected('preview')
+      const res = await getVideoDownloadData(ids)
       setList(res)
     } else {
       if (list.length > 0) {
@@ -138,22 +149,22 @@ const UrlsModal = ({ isOpen, onClose }: Props) => {
                                 </div>
                               </Tooltip>
                               <div className="text-tiny">
-                                @ {item.author.nickname}
+                                @ {item.userNickName}
                               </div>
                             </div>
                             <Image
                               width={80}
-                              src={item.video.cover}
+                              src={item.cover}
                               className="object-cover rounded-xl"
                             />
                             <div className="flex justify-center flex-1 text-tiny">
-                              {item.video.width}P
+                              {item.width}P
                             </div>
                             <div className="flex justify-center flex-1 text-tiny">
-                              {formatTime(item.video.duration)}
+                              {formatTime(item.duration)}
                             </div>
                             <div className="flex justify-end flex-1 text-tiny">
-                              {formatSize(item.video.size)}M
+                              {formatSize(item.size)}M
                             </div>
                           </CardBody>
                         </Card>
@@ -183,4 +194,4 @@ const UrlsModal = ({ isOpen, onClose }: Props) => {
   )
 }
 
-export default UrlsModal
+export default UrlsDownloadModal

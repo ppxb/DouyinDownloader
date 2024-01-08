@@ -24,16 +24,16 @@ import {
   AlbumIcon,
   NewIcon
 } from '@renderer/components/icon'
-import UrlsModal from './urlsModal'
+import UrlsDownloadModal from './urlsModal'
 
 const DownloadPage = () => {
-  const urlsModal = useDisclosure()
+  const urlsDownloadModal = useDisclosure()
 
   useEffect(() => {
     hotKeys('ctrl+n', (_, handler) => {
       switch (handler.key) {
         case 'ctrl+n':
-          urlsModal.onOpen()
+          urlsDownloadModal.onOpen()
           break
       }
     })
@@ -86,7 +86,7 @@ const DownloadPage = () => {
                   key="Urls download"
                   startContent={<UrlsIcon className="icon-default" />}
                   shortcut="Ctrl + N"
-                  onPress={urlsModal.onOpen}
+                  onPress={urlsDownloadModal.onOpen}
                 >
                   链接下载
                 </DropdownItem>
@@ -124,7 +124,10 @@ const DownloadPage = () => {
         </div>
       </CardBody>
 
-      <UrlsModal isOpen={urlsModal.isOpen} onClose={urlsModal.onClose} />
+      <UrlsDownloadModal
+        isOpen={urlsDownloadModal.isOpen}
+        onClose={urlsDownloadModal.onClose}
+      />
     </Card>
   )
 }

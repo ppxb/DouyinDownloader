@@ -1,3 +1,5 @@
+import { AppVideoPatternItem } from '@common/types'
+
 export type PatternMap = {
   [key: string]: RegExp
 }
@@ -10,7 +12,7 @@ export type ExtractedData = {
 export const extractDataFromUrls = (
   urls: string[],
   patterns: PatternMap
-): ExtractedData[] => {
+): AppVideoPatternItem[] => {
   return urls.map(url => {
     for (const [name, pattern] of Object.entries(patterns)) {
       const match = pattern.exec(url)
@@ -23,10 +25,14 @@ export const extractDataFromUrls = (
 }
 
 export const urlPatterns = {
-  account: new RegExp(
-    '\\S*?https://www\\.douyin\\.com/user/([A-Za-z0-9_-]+)(?:\\S*?\\bmodal_id=(\\d{19}))?'
+  accountLink: new RegExp(
+    'https://www\\.douyin\\.com/user/([A-Za-z0-9_-]+)(?:.*?modal_id=(\\d{19}))?'
   ),
-  discover: new RegExp(
-    '\\S*?https://www\\.douyin\\.com/discover(?:\\S*?\\bmodal_id=(\\d{19}))?'
+  discoverLink: new RegExp(
+    'https://www\\.douyin\\.com/discover(?:.*?modal_id=(\\d{19}))?'
+  ),
+  collectionLink: new RegExp(
+    'https://www\\.douyin\\.com/collection/(\\d+)',
+    'g'
   )
 }
