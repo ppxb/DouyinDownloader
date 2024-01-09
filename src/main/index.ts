@@ -10,6 +10,7 @@ import { join } from 'path'
 import icon from '../../resources/icon.png?asset'
 
 import { registerIpc } from './ipc'
+import { registerDownloadManager } from './manager'
 
 let mainWindow: BrowserWindow | null
 
@@ -30,7 +31,7 @@ const options: BrowserWindowConstructorOptions = {
   }
 }
 
-const createWindow = () => {
+const createWindow = (): BrowserWindow => {
   const mainWindow = new BrowserWindow(options)
 
   mainWindow.on('ready-to-show', () => {
@@ -49,6 +50,7 @@ const createWindow = () => {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+  return mainWindow
 }
 
 const initApp = () => {
@@ -75,8 +77,13 @@ const initApp = () => {
     // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils#optimizer
     // optimizer.registerFramelessWindowIpc()
 
-    registerIpc(mainWindow!)
+    app.on('session-created', session => {
+      registerDownloadManager(session)
+    })
+
     createWindow()
+
+    registerIpc()
 
     app.on('activate', () => {
       if (BrowserWindow.getAllWindows().length === 0) createWindow()

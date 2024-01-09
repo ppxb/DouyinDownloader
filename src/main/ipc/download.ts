@@ -39,8 +39,7 @@ let downloadCompletedIds: string[] = []
 const tempDownloadItemIds: string[] = []
 let downloadManager: DownloadManager
 
-export const registerDownloadIpc = (win: BrowserWindow) => {
-  downloadManager = new DownloadManager(win.webContents.session)
+export const registerDownloadIpc = () => {
   ipcMain.handle(
     IpcEvents.APP_GET_VIDEO_DOWNLOAD_DATA,
     (event: IpcMainInvokeEvent, items: IVideoPatternItem[]) =>

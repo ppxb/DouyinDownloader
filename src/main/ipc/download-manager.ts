@@ -1,4 +1,5 @@
 import { Session } from 'electron'
+
 import { IDownloadVideoFile } from '../../common/types'
 import { _getFileExt } from '../utils'
 import { _updateDownloadItem } from './helper'
@@ -12,7 +13,6 @@ class DownloadManager {
     this.downloadItems = new Map()
 
     this.session.on('will-download', (_, downloadItem, webContents) => {
-      console.log(downloadItem)
       let prevReceivedBytes = 0
 
       const item = this.downloadItems.get(downloadItem.getURLChain()[0])
