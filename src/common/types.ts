@@ -1,5 +1,17 @@
 import { DownloadItem } from 'electron'
 
+export interface App {
+  state: AppState
+  version: number
+}
+
+export interface AppState {
+  cookie: string
+  dir: string
+  folderNameFormat: string
+  fileNameFormat: string
+}
+
 export interface AppParsedVideo {
   title: string
   author: AppParsedVideoAuthor
@@ -53,11 +65,31 @@ export interface INewDownloadFile {
   path: string
 }
 
-export interface IDownloadFile {
-  id: string
-  url: string
-  fileName: string
+export interface IDownloadFileBase {
+  state: DownloadItemState
+  startTime: number
+  speed: number
+  progress: number
+  totalBytes: number
+  receivedBytes: number
+  paused: boolean
+}
+
+export interface IDownloadVideoFile extends IVideoDownloadFilePreview {
+  name: string
   path: string
+  folder: string
+  state: DownloadItemState
+  startTime: number
+  speed: number
+  progress: number
+  totalBytes: number
+  lastTime: number
+  receivedBytes: number
+  paused: boolean
+}
+
+export interface IDownloadFile {
   state: DownloadItemState
   startTime: number
   speed: number
@@ -69,16 +101,16 @@ export interface IDownloadFile {
 }
 
 export interface IAddDownloadItem {
+  newDownloadItem: IDownloadVideoFile
   item: DownloadItem
   downloadIds: string[]
-  data: IDownloadFile[]
-  newDownloadItem: INewDownloadFile | null
+  data: IDownloadVideoFile[]
 }
 
 export interface IUpdateDownloadItem {
   item: DownloadItem
-  data: IDownloadFile[]
-  downloadItem: IDownloadFile
+  data: IDownloadVideoFile[]
+  downloadItem: IDownloadVideoFile
   prevReceivedBytes: number
   state: DownloadItemState
 }

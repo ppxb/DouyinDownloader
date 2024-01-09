@@ -1,26 +1,26 @@
-import {
-  DownloadItem,
-  IpcMainEvent,
-  IpcMainInvokeEvent,
-  WebContents,
-  Event,
-  app
-} from 'electron'
+import { IpcMainEvent, IpcMainInvokeEvent } from 'electron'
 
 import { store } from '../ipc/store'
 import request, { RequestEnum } from '../utils/request'
 import {
-  AppParsedVideo,
   IVideoDownloadFilePreview,
   IVideoPatternItem,
   IAddDownloadItem,
   IDownloadBytes,
   IDownloadFile,
-  IUpdateDownloadItem
+  IUpdateDownloadItem,
+  IDownloadVideoFile
 } from '../../common/types'
 import { DOUYIN_DETAIL_ENTRY } from '../../common/consts'
-import { createDir, generateDatePath } from '../utils/dir'
-import { _getBase64Bytes, _getFileName, uuidV4 } from '../utils'
+import {
+  _createFolder,
+  _formatFileName,
+  _generateDownloadFolder,
+  _getBase64Bytes,
+  _getFileExt,
+  _getFileName,
+  _pathJoin
+} from '../utils'
 
 export const _handleGetVideoDownloadData = async (
   event: IpcMainInvokeEvent,
@@ -86,99 +86,41 @@ const getVideoData = (details: PromiseFulfilledResult<any>[]) => {
     })
 }
 
-export const _handleNewDownload = (
-  event: IpcMainEvent,
-  data: AppParsedVideo[]
-) => data.forEach(item => event.sender.downloadURL(item.video.url))
-
-export const _downloadListener = (
-  _: Event,
-  item: DownloadItem,
-  webContents: WebContents
-) => {
-  const storageBasePath = JSON.parse(store.get('app') as string).state.dir
-  const folder = generateDatePath()
-  if (createDir(folder)) {
-    item.setSavePath(
-      `${storageBasePath}\\${folder}\\${Date.now()}.${
-        item.getFilename().split('.')[1]
-      }`
-    )
-
-    item.on('updated', (_, state) => {
-      if (state === 'interrupted') {
-        console.log('Download is interrupted but can be resumed')
-      } else if (state === 'progressing') {
-        if (item.isPaused()) {
-          console.log('Download is paused')
-        } else {
-          console.log(`Received bytes: ${item.getReceivedBytes()}`)
-        }
-      }
-    })
-
-    item.once('done', (_, state) => {
-      if (state === 'completed') {
-        console.log('Download successfully')
-      } else {
-        console.log(`Download failed: ${state}`)
-      }
-    })
-  } else {
-    webContents.send('downloadError', '创建下载任务失败,下载文件夹创建失败')
-  }
-}
+export const _download = (event: IpcMainEvent, url: string) =>
+  event.sender.downloadURL(url)
 
 export const _addDownloadItem = async ({
+  newDownloadItem,
   item,
   downloadIds,
-  data,
-  newDownloadItem
-}: IAddDownloadItem): Promise<IDownloadFile> => {
+  data
+}: IAddDownloadItem): Promise<IDownloadVideoFile> => {
   const id = downloadIds.shift() || ''
   const itemIndex = _getDownloadIndex(data, id)
 
-  const fileUrl = item.getURL()
-  const fileName = _getFileName(
-    newDownloadItem?.fileName || '',
-    item.getFilename()
-  )
+  const ext = _getFileExt(item.getFilename())
   const startTime = item.getStartTime()
-  const totalBytes = _getBase64Bytes(fileUrl) || item.getTotalBytes()
+  const totalBytes = item.getTotalBytes()
 
-  let fileId = uuidV4()
-  const savePath = newDownloadItem?.path || app.getPath('downloads')
-
-  if (itemIndex > -1) {
-    const newItems = data.splice(itemIndex, 1)
-    const newItem = newItems[0]
-
-    fileId = newItem.id
-    if (newItem.paused) {
-      item.pause()
-    }
-  }
+  const savePath = `${newDownloadItem.folder}\\${newDownloadItem.name}${ext}`
 
   item.setSavePath(savePath)
 
-  const downloadItem: IDownloadFile = {
-    id: fileId,
-    url: fileUrl,
-    fileName,
+  const downloadItem: IDownloadVideoFile = {
+    ...newDownloadItem,
     path: savePath,
     state: item.getState(),
     startTime,
     speed: 0,
     progress: 0,
     totalBytes,
+    lastTime: 0,
     receivedBytes: item.getReceivedBytes(),
-    paused: item.isPaused(),
-    _sourceItem: item
+    paused: item.isPaused()
   }
 
   data.unshift(downloadItem)
-  newDownloadItem = null
-  _setDownloadStore(data)
+  // _setDownloadStore(data)
 
   return downloadItem
 }
@@ -197,6 +139,9 @@ export const _updateDownloadItem = ({
   downloadItem.progress = receivedBytes / downloadItem.totalBytes
   downloadItem.state = state
   downloadItem.paused = item.isPaused()
+  downloadItem.lastTime = 0
+  // (downloadItem.totalBytes - downloadItem.receivedBytes) /
+  // (downloadItem.speed === 0 ? 1 : downloadItem.speed)
 
   _setDownloadStore(data)
   return receivedBytes
@@ -218,11 +163,13 @@ export const _getDownloadBytes = (data: IDownloadFile[]): IDownloadBytes => {
   return allBytes
 }
 
-export const _getDownloadIndex = (data: IDownloadFile[], id: string): number =>
-  data.findIndex(item => item.id === id)
+export const _getDownloadIndex = (
+  data: IDownloadVideoFile[],
+  id: string
+): number => data.findIndex(item => item.id === id)
 
-export const _setDownloadStore = (data: IDownloadFile[]): void =>
+export const _setDownloadStore = (data: IDownloadVideoFile[]): void =>
   store.set('downloadManager', data)
 
-export const _getDownloadStore = (): IDownloadFile[] =>
-  store.get('downloadManager', []) as IDownloadFile[]
+export const _getDownloadStore = (): IDownloadVideoFile[] =>
+  store.get('downloadManager', []) as IDownloadVideoFile[]

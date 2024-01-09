@@ -4,31 +4,43 @@ import {
   IpcMainInvokeEvent,
   Event,
   DownloadItem,
-  WebContents
+  WebContents,
+  IpcMainEvent
 } from 'electron'
 
 import { IpcEvents } from '../../common/ipcEvents'
 import {
   IVideoPatternItem,
-  IDownloadFile,
-  INewDownloadFile
+  IVideoDownloadFilePreview,
+  App,
+  IDownloadVideoFile
 } from '../../common/types'
 import {
   _addDownloadItem,
-  _downloadListener,
+  _download,
   _getDownloadBytes,
   _handleGetVideoDownloadData,
-  _handleNewDownload,
   _setDownloadStore,
   _updateDownloadItem
 } from './helper'
+import { store } from './store'
+import {
+  _createFolder,
+  _formatFileName,
+  _generateDownloadFolder,
+  _pathJoin
+} from '../utils'
+import DownloadManager from './download-manager'
+import { BrowserWindow } from 'electron'
 
-let newDownloadItem: INewDownloadFile | null
-let downloadItemData: IDownloadFile[] = []
+const willDownloadQueue: IDownloadVideoFile[] = []
+let downloadItemData: IDownloadVideoFile[] = []
 let downloadCompletedIds: string[] = []
 const tempDownloadItemIds: string[] = []
+let downloadManager: DownloadManager
 
-export const registerDownloadIpc = () => {
+export const registerDownloadIpc = (win: BrowserWindow) => {
+  downloadManager = new DownloadManager(win.webContents.session)
   ipcMain.handle(
     IpcEvents.APP_GET_VIDEO_DOWNLOAD_DATA,
     (event: IpcMainInvokeEvent, items: IVideoPatternItem[]) =>
@@ -36,44 +48,57 @@ export const registerDownloadIpc = () => {
   )
 
   ipcMain.on(IpcEvents.APP_NEW_DOWNLOAD, _handleNewDownload)
-
-  session.defaultSession.on('will-download', downloadListener)
 }
 
-const downloadListener = async (
-  _: Event,
-  item: DownloadItem,
-  webContents: WebContents
+export const _handleNewDownload = (
+  event: IpcMainEvent,
+  data: IVideoDownloadFilePreview[]
 ) => {
-  if (!newDownloadItem) return
+  const { state } = JSON.parse(store.get('app') as string) as App
+  data.forEach(item => {
+    const newFileName = _formatFileName(state.fileNameFormat, item)
+    const folder = _createFolder(_generateDownloadFolder())
+    const newDownloadItem = {
+      ...item,
+      name: newFileName,
+      folder
+    } as IDownloadVideoFile
+    willDownloadQueue.push(newDownloadItem)
 
-  let prevReceivedBytes = 0
+    downloadManager.download(newDownloadItem.url, newDownloadItem)
 
-  const downloadItem: IDownloadFile = await _addDownloadItem({
-    item,
-    downloadIds: tempDownloadItemIds,
-    data: downloadItemData,
-    newDownloadItem
+    // const willDownload = createDownloadWrapper(newDownloadItem)
+    // _download(event, newDownloadItem.url)
+    // session.defaultSession.once('will-download', willDownload)
   })
+}
 
-  console.log(downloadItem)
+const createDownloadWrapper = (willDownloadItem: IDownloadVideoFile) => {
+  return async (e: Event, item: DownloadItem, webContents: WebContents) => {
+    e.preventDefault()
+    let prevReceivedBytes = 0
 
-  webContents.send('newDownloadItem', { ...downloadItem, _sourceItem: null })
-
-  item.on('updated', (_, state) => {
-    const receivedBytes = _updateDownloadItem({
+    const downloadItem: IDownloadVideoFile = await _addDownloadItem({
+      newDownloadItem: willDownloadItem,
       item,
-      downloadItem,
-      data: downloadItemData,
-      prevReceivedBytes,
-      state
+      downloadIds: tempDownloadItemIds,
+      data: willDownloadQueue
     })
-    prevReceivedBytes = receivedBytes
 
-    // const bytes = _getDownloadBytes(downloadItemData)
-    webContents.send('downloadItemUpdate', {
-      ...downloadItem,
-      _sourceItem: null
+    webContents.send('newDownloadItem', { ...downloadItem })
+
+    item.on('updated', (_, state) => {
+      const receivedBytes = _updateDownloadItem({
+        item,
+        downloadItem,
+        data: downloadItemData,
+        prevReceivedBytes,
+        state
+      })
+      prevReceivedBytes = receivedBytes
+
+      // const bytes = _getDownloadBytes(downloadItemData)
+      webContents.send('downloadItemUpdate', { ...downloadItem })
     })
 
     item.on('done', (_, state) => {
@@ -85,10 +110,7 @@ const downloadListener = async (
       }
 
       _setDownloadStore(downloadItemData)
-      webContents.send('downloadItemDone', {
-        ...downloadItem,
-        _sourceItem: null
-      })
+      webContents.send('downloadItemDone', { ...downloadItem })
     })
-  })
+  }
 }

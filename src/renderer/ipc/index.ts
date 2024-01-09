@@ -31,3 +31,15 @@ export const getVideoDownloadData = (
   items: IVideoPatternItem[]
 ): Promise<IVideoDownloadFilePreview[]> =>
   ipcRendererInvoke(IpcEvents.APP_GET_VIDEO_DOWNLOAD_DATA, items)
+
+export const listenerNewDownloadItem = (
+  cb: (evene: IpcRendererEvent, ...args: any[]) => void
+): void => ipcRendererOn('newDownloadItem', cb)
+
+export const listenerDownloadItemUpdate = (
+  cb: (event: IpcRendererEvent, ...args: any[]) => void
+) => ipcRendererOn('downloadItemUpdate', cb)
+
+export const listenerDownloadItemDone = (
+  cb: (event: IpcRendererEvent, ...args: any[]) => void
+) => ipcRendererOn('downloadItemDone', cb)

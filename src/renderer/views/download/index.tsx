@@ -1,14 +1,8 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import {
   Card,
   CardHeader,
   CardBody,
-  Button,
-  Dropdown,
-  DropdownTrigger,
-  DropdownItem,
-  DropdownMenu,
-  DropdownSection,
   useDisclosure,
   Tabs,
   Tab
@@ -17,23 +11,51 @@ import hotKeys from 'hotkeys-js'
 import { toast } from 'sonner'
 
 import {
-  AccountIcon,
-  UrlsIcon,
-  HotIcon,
-  FavIcon,
-  AlbumIcon,
-  NewIcon
-} from '@renderer/components/icon'
-import UrlsDownloadModal from './urlsModal'
+  listenerDownloadItemUpdate,
+  listenerNewDownloadItem
+} from '@renderer/ipc'
+import { IDownloadVideoFile } from '@common/types'
+
+import LinkModal from './link-modal'
+import DownloadMenu from './download-menu'
+import DownloadingContent from './downloading-content'
 
 const DownloadPage = () => {
-  const urlsDownloadModal = useDisclosure()
+  const linkModalRef = useDisclosure()
+  const [downloadItem, setDownloadItem] = useState<IDownloadVideoFile[]>([])
+
+  const downloadItemRef = useRef<IDownloadVideoFile[]>([])
+
+  const handleUpdateData = useCallback((item: IDownloadVideoFile) => {
+    const index = downloadItemRef.current.findIndex(d => d.id === item.id)
+
+    if (index < 0) {
+      downloadItemRef.current.unshift(item)
+    } else {
+      downloadItemRef.current[index] = item
+    }
+
+    setDownloadItem([...downloadItemRef.current])
+  }, [])
+
+  useEffect(() => {
+    listenerNewDownloadItem((_, item) => {
+      if (!downloadItemRef.current.map(i => i.id === item.id)) {
+        downloadItemRef.current.push(item)
+      }
+      handleUpdateData(item)
+    })
+
+    listenerDownloadItemUpdate((_, item) => {
+      handleUpdateData(item)
+    })
+  }, [handleUpdateData])
 
   useEffect(() => {
     hotKeys('ctrl+n', (_, handler) => {
       switch (handler.key) {
         case 'ctrl+n':
-          urlsDownloadModal.onOpen()
+          linkModalRef.onOpen()
           break
       }
     })
@@ -56,79 +78,33 @@ const DownloadPage = () => {
   }, [])
 
   return (
-    <Card radius="none" className="relative min-h-screen overflow-visible">
-      <CardHeader className="flex pt-10 px-8 sticky z-40 top-0 mb-2 backdrop-blur-lg">
-        <div className="felx flex-col">
-          <div className="text-2xl font-bold mb-1">下载</div>
-          <div className="text-tiny text-foreground/50">
-            开始新的下载任务以及查看下载任务
+    <>
+      <Card radius="none" className="relative min-h-screen overflow-visible">
+        <CardHeader className="flex pt-10 px-8 sticky z-40 top-0 mb-2 backdrop-blur-lg">
+          <div className="felx flex-col">
+            <div className="text-2xl font-bold mb-1">下载</div>
+            <div className="text-tiny text-foreground/50">
+              开始新的下载任务以及查看下载任务
+            </div>
           </div>
-        </div>
-      </CardHeader>
-      <CardBody className="px-5 py-4">
-        <Tabs size="sm">
-          <Tab>下载中</Tab>
-          <Tab>已完成</Tab>
-        </Tabs>
-        <div className="absolute right-14 bottom-14">
-          <Dropdown>
-            <DropdownTrigger>
-              <Button isIconOnly radius="lg" variant="flat">
-                <NewIcon />
-              </Button>
-            </DropdownTrigger>
-            <DropdownMenu
-              variant="faded"
-              aria-label="Create a new download task"
-            >
-              <DropdownSection title="新建下载任务">
-                <DropdownItem
-                  key="Urls download"
-                  startContent={<UrlsIcon className="icon-default" />}
-                  shortcut="Ctrl + N"
-                  onPress={urlsDownloadModal.onOpen}
-                >
-                  链接下载
-                </DropdownItem>
-                <DropdownItem
-                  key="Download account works"
-                  startContent={<AccountIcon className="icon-default" />}
-                  shortcut="Ctrl + A"
-                >
-                  账号作品下载
-                </DropdownItem>
-                <DropdownItem
-                  key="Download album works"
-                  startContent={<AlbumIcon className="icon-default" />}
-                  shortcut="Ctrl + B"
-                >
-                  图集下载
-                </DropdownItem>
-                <DropdownItem
-                  key="Favorite works batch download"
-                  startContent={<FavIcon className="icon-default" />}
-                  shortcut="Ctrl + F"
-                >
-                  收藏下载
-                </DropdownItem>
-                <DropdownItem
-                  key="Hot works batch download"
-                  startContent={<HotIcon className="icon-default" />}
-                  shortcut="Ctrl + H"
-                >
-                  热榜下载
-                </DropdownItem>
-              </DropdownSection>
-            </DropdownMenu>
-          </Dropdown>
-        </div>
-      </CardBody>
-
-      <UrlsDownloadModal
-        isOpen={urlsDownloadModal.isOpen}
-        onClose={urlsDownloadModal.onClose}
-      />
-    </Card>
+        </CardHeader>
+        <CardBody className="py-4">
+          <Tabs
+            size="sm"
+            classNames={{
+              base: 'px-4'
+            }}
+          >
+            <Tab key="downloading" title="下载中">
+              <DownloadingContent items={downloadItem} />
+            </Tab>
+            <Tab>已完成</Tab>
+          </Tabs>
+        </CardBody>
+      </Card>
+      <DownloadMenu openLinkModal={linkModalRef.onOpen} />
+      <LinkModal isOpen={linkModalRef.isOpen} onClose={linkModalRef.onClose} />
+    </>
   )
 }
 

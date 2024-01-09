@@ -25,6 +25,7 @@ export const generateDatePath = () => {
 }
 
 export const createDir = (folder: string) => {
+  const {} = JSON.parse(store.get('app') as string)
   const app = JSON.parse(store.get('app') as string)
   const dir = path.join(app.state.dir, folder)
 

@@ -24,12 +24,12 @@ import { IpcEvents } from '@common/ipcEvents'
 import { IVideoDownloadFilePreview } from '@common/types'
 import { toast } from 'sonner'
 
-interface Props {
+interface LinkModalProps {
   isOpen: boolean
   onClose: () => void
 }
 
-const UrlsDownloadModal = ({ isOpen, onClose }: Props) => {
+const LinkModal = ({ isOpen, onClose }: LinkModalProps) => {
   const [urls, setUrls] = useState('')
   const [list, setList] = useState<IVideoDownloadFilePreview[]>([])
   const [selected, setSelected] = useState('input')
@@ -50,12 +50,12 @@ const UrlsDownloadModal = ({ isOpen, onClose }: Props) => {
 
   const handleNextClick = async () => {
     if (selected === 'input' && urls.length > 0) {
-      const ids = extractDataFromUrls(
-        [...new Set(urls.split('\n'))],
-        urlPatterns
-      ).filter(i => i.type !== 'unknown')
-      if (ids.length === 0) {
-        toast('无效的下载链接', {
+      const uniqueUrls = [...new Set(urls.split('\n'))]
+      const items = extractDataFromUrls(uniqueUrls, urlPatterns).filter(
+        i => i.type !== 'unknown'
+      )
+      if (items.length === 0) {
+        toast('不支持的下载链接', {
           position: 'top-center',
           description: '请检查您输入的链接是否正确',
           duration: 2000,
@@ -67,7 +67,7 @@ const UrlsDownloadModal = ({ isOpen, onClose }: Props) => {
         return
       }
       setSelected('preview')
-      const res = await getVideoDownloadData(ids)
+      const res = await getVideoDownloadData(items)
       setList(res)
     } else {
       if (list.length > 0) {
@@ -194,4 +194,4 @@ const UrlsDownloadModal = ({ isOpen, onClose }: Props) => {
   )
 }
 
-export default UrlsDownloadModal
+export default LinkModal
