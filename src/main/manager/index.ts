@@ -5,6 +5,7 @@ import { Response } from 'node-fetch'
 import { IDownloadVideoFile } from '../../common/types'
 
 const fetch = (...args: [RequestInfo, RequestInit?]) =>
+  //@ts-ignore
   import('node-fetch').then(({ default: fetch }) => fetch(...args))
 
 class DownloadManager {
