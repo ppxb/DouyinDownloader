@@ -29,6 +29,14 @@ DouyinDownloader 现在支持通过简单的GUI交互下载抖音无水印视频
 > | :----------: | :--------: |
 > | 新建链接下载 | `CTRL + N` |
 
+设置 Cookie
+
+> \[!Note]
+>
+> 在下载前请保证正确设置了 Cookie，否则将无法正确的解析资源。
+
+![设置 Cookie](https://github.com/ppxb/DouyinDownloader/blob/master/screenshots/setcookie.png?raw=true)
+
 主界面
 
 ![主界面](https://github.com/ppxb/DouyinDownloader/blob/master/screenshots/mainwindow.png?raw=true)

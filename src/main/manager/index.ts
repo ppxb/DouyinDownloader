@@ -52,9 +52,9 @@ class DownloadManager {
       time: 100
     })
 
-    progressStream.on('progress', progressData => {
-      // console.log(progressData)
-    })
+    // progressStream.on('progress', progressData => {
+    //   console.log(progressData)
+    // })
 
     const ext = this.getExtFromContentType(
       response.headers.get('contentType') || ''
