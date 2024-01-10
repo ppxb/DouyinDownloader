@@ -62,7 +62,12 @@ $ pnpm install
 $ pnpm dev -w
 ```
 
-## 🛠 构建
+## 🛠 构建(WIP)
+
+> \[!Note]
+>
+> 现阶段未对任何平台的分发进行测试，请使用开发模式进行调试。
+
 
 ```bash
 $ git clone this repo
