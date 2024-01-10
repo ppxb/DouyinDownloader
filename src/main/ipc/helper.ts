@@ -1,26 +1,13 @@
-import { IpcMainEvent, IpcMainInvokeEvent } from 'electron'
+import { IpcMainInvokeEvent } from 'electron'
 
 import { store } from '../ipc/store'
 import request, { RequestEnum } from '../utils/request'
 import {
   IVideoDownloadFilePreview,
   IVideoPatternItem,
-  IAddDownloadItem,
-  IDownloadBytes,
-  IDownloadFile,
-  IUpdateDownloadItem,
   IDownloadVideoFile
 } from '../../common/types'
 import { DOUYIN_DETAIL_ENTRY } from '../../common/consts'
-import {
-  _createFolder,
-  _formatFileName,
-  _generateDownloadFolder,
-  _getBase64Bytes,
-  _getFileExt,
-  _getFileName,
-  _pathJoin
-} from '../utils'
 
 export const _handleGetVideoDownloadData = async (
   event: IpcMainInvokeEvent,
@@ -84,83 +71,6 @@ const getVideoData = (details: PromiseFulfilledResult<any>[]) => {
         height: i['aweme_detail']['video']['play_addr']['height']
       } as IVideoDownloadFilePreview
     })
-}
-
-export const _download = (event: IpcMainEvent, url: string) =>
-  event.sender.downloadURL(url)
-
-export const _addDownloadItem = async ({
-  newDownloadItem,
-  item,
-  downloadIds,
-  data
-}: IAddDownloadItem): Promise<IDownloadVideoFile> => {
-  const id = downloadIds.shift() || ''
-  const itemIndex = _getDownloadIndex(data, id)
-
-  const ext = _getFileExt(item.getFilename())
-  const startTime = item.getStartTime()
-  const totalBytes = item.getTotalBytes()
-
-  const savePath = `${newDownloadItem.folder}\\${newDownloadItem.name}${ext}`
-
-  item.setSavePath(savePath)
-
-  const downloadItem: IDownloadVideoFile = {
-    ...newDownloadItem,
-    path: savePath,
-    state: item.getState(),
-    startTime,
-    speed: 0,
-    progress: 0,
-    totalBytes,
-    lastTime: 0,
-    receivedBytes: item.getReceivedBytes(),
-    paused: item.isPaused()
-  }
-
-  data.unshift(downloadItem)
-  // _setDownloadStore(data)
-
-  return downloadItem
-}
-
-export const _updateDownloadItem = ({
-  item,
-  downloadItem,
-  data,
-  prevReceivedBytes,
-  state
-}: IUpdateDownloadItem): number => {
-  const receivedBytes = item.getReceivedBytes()
-
-  downloadItem.receivedBytes = receivedBytes
-  downloadItem.speed = receivedBytes - prevReceivedBytes
-  downloadItem.progress = receivedBytes / downloadItem.totalBytes
-  downloadItem.state = state
-  downloadItem.paused = item.isPaused()
-  downloadItem.lastTime = 0
-  // (downloadItem.totalBytes - downloadItem.receivedBytes) /
-  // (downloadItem.speed === 0 ? 1 : downloadItem.speed)
-
-  _setDownloadStore(data)
-  return receivedBytes
-}
-
-export const _getDownloadBytes = (data: IDownloadFile[]): IDownloadBytes => {
-  const allBytes = data.reduce<IDownloadBytes>(
-    (prev, current) => {
-      if (current.state === 'progressing') {
-        prev.receivedBytes += current.receivedBytes
-        prev.totalBytes += current.totalBytes
-      }
-
-      return prev
-    },
-    { receivedBytes: 0, totalBytes: 0 }
-  )
-
-  return allBytes
 }
 
 export const _getDownloadIndex = (

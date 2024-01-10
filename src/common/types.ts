@@ -1,5 +1,3 @@
-import { DownloadItem } from 'electron'
-
 export interface App {
   state: AppState
   version: number
@@ -10,28 +8,6 @@ export interface AppState {
   dir: string
   folderNameFormat: string
   fileNameFormat: string
-}
-
-export interface AppParsedVideo {
-  title: string
-  author: AppParsedVideoAuthor
-  video: AppParsedVideoDetail
-  id: string
-}
-
-export interface AppParsedVideoAuthor {
-  nickname: string
-  secUid: string
-  avatar: string
-}
-
-export interface AppParsedVideoDetail {
-  url: string
-  duration: number
-  size: number
-  cover: string
-  height: number
-  width: number
 }
 
 export type DownloadItemState =
@@ -59,22 +35,6 @@ export interface IVideoDownloadFilePreview {
   height: number
 }
 
-export interface INewDownloadFile {
-  url: string
-  fileName?: string
-  path: string
-}
-
-export interface IDownloadFileBase {
-  state: DownloadItemState
-  startTime: number
-  speed: number
-  progress: number
-  totalBytes: number
-  receivedBytes: number
-  paused: boolean
-}
-
 export interface IDownloadVideoFile extends IVideoDownloadFilePreview {
   name: string
   path: string
@@ -87,35 +47,4 @@ export interface IDownloadVideoFile extends IVideoDownloadFilePreview {
   lastTime: number
   receivedBytes: number
   paused: boolean
-}
-
-export interface IDownloadFile {
-  state: DownloadItemState
-  startTime: number
-  speed: number
-  progress: number
-  totalBytes: number
-  receivedBytes: number
-  paused: boolean
-  _sourceItem: DownloadItem | undefined
-}
-
-export interface IAddDownloadItem {
-  newDownloadItem: IDownloadVideoFile
-  item: DownloadItem
-  downloadIds: string[]
-  data: IDownloadVideoFile[]
-}
-
-export interface IUpdateDownloadItem {
-  item: DownloadItem
-  data: IDownloadVideoFile[]
-  downloadItem: IDownloadVideoFile
-  prevReceivedBytes: number
-  state: DownloadItemState
-}
-
-export interface IDownloadBytes {
-  receivedBytes: number
-  totalBytes: number
 }

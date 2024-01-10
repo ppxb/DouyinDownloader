@@ -1,10 +1,6 @@
 import type { IpcRendererEvent } from 'electron'
 
-import {
-  IDownloadFile,
-  IVideoDownloadFilePreview,
-  IVideoPatternItem
-} from '@common/types'
+import { IVideoDownloadFilePreview, IVideoPatternItem } from '@common/types'
 
 import { IpcEvents } from '@common/ipcEvents'
 
@@ -23,9 +19,6 @@ export const ipcRendererInvoke = <T>(
   ipcEventName: string,
   ...args: any[]
 ): Promise<T> => ipcRenderer.invoke(ipcEventName, ...args)
-
-export const newDownloadFile = (list: any): Promise<IDownloadFile | null> =>
-  ipcRendererInvoke<IDownloadFile | null>('newDownloadFile', list)
 
 export const getVideoDownloadData = (
   items: IVideoPatternItem[]

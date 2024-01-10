@@ -10,7 +10,6 @@ import { join } from 'path'
 import icon from '../../resources/icon.png?asset'
 
 import { registerIpc } from './ipc'
-import { registerDownloadManager } from './manager'
 
 let mainWindow: BrowserWindow | null
 
@@ -76,10 +75,6 @@ const initApp = () => {
 
     // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils#optimizer
     // optimizer.registerFramelessWindowIpc()
-
-    app.on('session-created', session => {
-      registerDownloadManager(session)
-    })
 
     createWindow()
 
