@@ -13,7 +13,7 @@ export interface AppState {
 export type DownloadItemState =
   | 'progressing'
   | 'interrupted'
-  | 'completed'
+  | 'finish'
   | 'cancelled'
 
 export interface IVideoPatternItem {
@@ -42,9 +42,10 @@ export interface IDownloadVideoFile extends IVideoDownloadFilePreview {
   state: DownloadItemState
   startTime: number
   speed: number
-  progress: number
-  totalBytes: number
-  lastTime: number
-  receivedBytes: number
+  percentage: number
+  length: number
+  eta: number
+  transferred: number
   paused: boolean
+  finishTime: string
 }

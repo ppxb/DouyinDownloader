@@ -77,9 +77,9 @@ const initApp = () => {
       // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils#optimizer
       // optimizer.registerFramelessWindowIpc()
 
-      createWindow()
+      const win = createWindow()
 
-      registerIpc()
+      registerIpc(win)
 
       app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()

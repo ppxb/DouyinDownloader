@@ -27,12 +27,12 @@ export const getVideoDownloadData = (
 
 export const listenerNewDownloadItem = (
   cb: (evene: IpcRendererEvent, ...args: any[]) => void
-): void => ipcRendererOn('newDownloadItem', cb)
+): void => ipcRendererOn(IpcEvents.APP_ITEM_DOWNLOADING, cb)
 
 export const listenerDownloadItemUpdate = (
   cb: (event: IpcRendererEvent, ...args: any[]) => void
-) => ipcRendererOn('downloadItemUpdate', cb)
+) => ipcRendererOn(IpcEvents.APP_ITEM_DOWNLOAD_UPDATE, cb)
 
-export const listenerDownloadItemDone = (
+export const listenerDownloadItemFinish = (
   cb: (event: IpcRendererEvent, ...args: any[]) => void
-) => ipcRendererOn('downloadItemDone', cb)
+) => ipcRendererOn(IpcEvents.APP_ITEM_DOWNLOAD_FINISH, cb)

@@ -10,5 +10,9 @@ export enum IpcEvents {
   APP_ASSET_PREVIEW = 'app:asset-preview',
   APP_NEW_DOWNLOAD = 'app:new-download',
 
+  APP_ITEM_DOWNLOADING = 'app:item-downloading',
+  APP_ITEM_DOWNLOAD_UPDATE = 'app:item-download-update',
+  APP_ITEM_DOWNLOAD_FINISH = 'app:item-download-finish',
+
   APP_GET_VIDEO_DOWNLOAD_DATA = 'app:get-video-download-data'
 }

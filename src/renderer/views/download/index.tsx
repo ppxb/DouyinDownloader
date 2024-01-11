@@ -11,6 +11,7 @@ import hotKeys from 'hotkeys-js'
 import { toast } from 'sonner'
 
 import {
+  listenerDownloadItemFinish,
   listenerDownloadItemUpdate,
   listenerNewDownloadItem
 } from '@renderer/ipc'
@@ -18,7 +19,7 @@ import { IDownloadVideoFile } from '@common/types'
 
 import LinkModal from './link-modal'
 import DownloadMenu from './download-menu'
-import DownloadingContent from './downloading-content'
+import DownloadContent from './download-content'
 
 const DownloadPage = () => {
   const linkModalRef = useDisclosure()
@@ -40,13 +41,17 @@ const DownloadPage = () => {
 
   useEffect(() => {
     listenerNewDownloadItem((_, item) => {
-      if (!downloadItemRef.current.map(i => i.id === item.id)) {
+      if (!downloadItemRef.current.map(i => i.id === item.id).length) {
         downloadItemRef.current.push(item)
       }
       handleUpdateData(item)
     })
 
     listenerDownloadItemUpdate((_, item) => {
+      handleUpdateData(item)
+    })
+
+    listenerDownloadItemFinish((_, item) => {
       handleUpdateData(item)
     })
   }, [handleUpdateData])
@@ -96,9 +101,17 @@ const DownloadPage = () => {
             }}
           >
             <Tab key="downloading" title="下载中">
-              <DownloadingContent items={downloadItem} />
+              <DownloadContent
+                type="downloading"
+                items={downloadItem.filter(i => i.state === 'progressing')}
+              />
             </Tab>
-            <Tab>已完成</Tab>
+            <Tab key="downloaded" title="已完成">
+              <DownloadContent
+                type="downloaded"
+                items={downloadItem.filter(i => i.state === 'finish')}
+              />
+            </Tab>
           </Tabs>
         </CardBody>
       </Card>

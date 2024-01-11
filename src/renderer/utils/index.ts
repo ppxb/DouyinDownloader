@@ -8,6 +8,14 @@ export const formatTime = (duration: number) => {
   return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
 }
 
+export const formatEta = (eta: number) => {
+  const pad = (num: number) => num.toString().padStart(2, '0')
+  const hours = Math.floor(eta / 3600)
+  const minutes = Math.floor((eta % 3600) / 60)
+  const seconds = eta % 60
+  return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
+}
+
 export const formatSize = (size: number) => {
   return (size / 1024 / 1024).toFixed(2)
 }

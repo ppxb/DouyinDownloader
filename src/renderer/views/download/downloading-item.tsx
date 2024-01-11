@@ -1,7 +1,8 @@
 import { Card, CardBody, Tooltip } from '@nextui-org/react'
 
 import { IDownloadVideoFile } from '@common/types'
-import { formatSize, formatTime } from '@renderer/utils'
+import { formatEta, formatSize } from '@renderer/utils'
+import { PauseIcon, DeleteIcon, PlayIcon } from '@renderer/components/icon'
 
 interface DownloadingItemProps {
   item: IDownloadVideoFile
@@ -24,10 +25,19 @@ const DownloadingItem = ({ item }: DownloadingItemProps) => {
             </Tooltip>
           </div>
           <div className="text-tiny">
-            {formatSize(item.receivedBytes)}/{formatSize(item.size)}M
+            {formatSize(item.transferred)}/{formatSize(item.length)}M
           </div>
           <div className="text-tiny">{formatSize(item.speed)} MB/s</div>
-          <div className="text-tiny">{formatTime(item.lastTime)}</div>
+          <div className="text-tiny">{formatEta(item.eta)}</div>
+          <div className="flex gap-2">
+            {item.state === 'progressing' ? (
+              <PauseIcon className="hover:cursor-pointer" />
+            ) : (
+              <PlayIcon className="hover:cursor-pointer" />
+            )}
+
+            <DeleteIcon className="text-red-500 hover:cursor-pointer" />
+          </div>
         </CardBody>
       </Card>
     </div>

@@ -1,4 +1,9 @@
-import { ipcMain, IpcMainInvokeEvent, IpcMainEvent } from 'electron'
+import {
+  ipcMain,
+  IpcMainInvokeEvent,
+  IpcMainEvent,
+  BrowserWindow
+} from 'electron'
 
 import { store } from './store'
 import { _handleGetVideoDownloadData } from './helper'
@@ -16,9 +21,10 @@ import {
 } from '../utils'
 import DownloadManager from '../manager'
 
-const downloadManager = new DownloadManager(5)
+let downloadManager: DownloadManager | null
 
-export const registerDownloadIpc = () => {
+export const registerDownloadIpc = (win: BrowserWindow) => {
+  downloadManager = new DownloadManager(5, win.webContents)
   ipcMain.handle(
     IpcEvents.APP_GET_VIDEO_DOWNLOAD_DATA,
     (event: IpcMainInvokeEvent, items: IVideoPatternItem[]) =>
@@ -40,8 +46,15 @@ export const _handleNewDownload = (
     const newDownloadItem = {
       ...item,
       name: newFileName,
-      folder
+      folder,
+      state: 'progressing',
+      speed: 0,
+      percentage: 0,
+      length: 0,
+      eta: 0,
+      transferred: 0,
+      paused: false
     } as IDownloadVideoFile
-    downloadManager.download(newDownloadItem)
+    downloadManager!.download(newDownloadItem)
   })
 }

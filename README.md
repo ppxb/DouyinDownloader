@@ -23,35 +23,23 @@ DouyinDownloader 现在支持通过简单的GUI交互下载抖音无水印视频
 
 > \[!TIP]
 >
-> DouyinDownloader 支持全局快捷键。
->
-> |     功能     |   快捷键   |
+> |     功能     | 全局快捷键 |
 > | :----------: | :--------: |
 > | 新建链接下载 | `CTRL + N` |
 
-设置 Cookie
+##### 设置 Cookie
 
-> \[!Note]
+> \[!IMPORTANT]
 >
 > 在下载前请保证正确设置了 Cookie，否则将无法正确的解析资源。
 
-![设置 Cookie](https://github.com/ppxb/DouyinDownloader/blob/master/screenshots/setcookie.png?raw=true)
+![](./screenshots/setcookie.png)
 
-主界面
+##### 截图
 
-![主界面](https://github.com/ppxb/DouyinDownloader/blob/master/screenshots/mainwindow.png?raw=true)
+![](./screenshots/main.png)
 
-设置
-
-![设置](https://raw.githubusercontent.com/ppxb/DouyinDownloader/master/screenshots/settings.png)
-
-批量下载链接
-
-![批量下载链接](https://raw.githubusercontent.com/ppxb/DouyinDownloader/master/screenshots/batchurls.png)
-
-下载前预览
-
-![下载前预览](https://raw.githubusercontent.com/ppxb/DouyinDownloader/master/screenshots/batchurlspreview.png)
+![](./screenshots/batchurlspreview.png)
 
 ## ⚡️ 开发
 
@@ -64,10 +52,9 @@ $ pnpm dev -w
 
 ## 🛠 构建(WIP)
 
-> \[!Note]
+> \[!IMPORTANT]
 >
 > 现阶段未对任何平台的分发进行测试，请使用开发模式进行调试。
-
 
 ```bash
 $ git clone this repo
@@ -87,4 +74,4 @@ $ pnpm build:linux
 
 ## 📃 License
 
-MIT © [ppxb](https://github.com/ppxb/DouyinDownloader/blob/master/LICENSE)
+MIT © [ppxb](./LICENSE)

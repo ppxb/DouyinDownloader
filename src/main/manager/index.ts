@@ -3,13 +3,18 @@ import axios from 'axios'
 import progress from 'progress-stream'
 
 import { IDownloadVideoFile } from '../../common/types'
+import { WebContents } from 'electron'
+import { IpcEvents } from '../../common/ipcEvents'
+import { _getCurrentFormattedTime } from '../utils'
 
 class DownloadManager {
   private maxConcurrentDownloads: number
   private currentDownloads: Set<Promise<void>> = new Set()
+  private webContents: WebContents
 
-  constructor(maxConcurrentDownloads: number) {
+  constructor(maxConcurrentDownloads: number, webContents: WebContents) {
     this.maxConcurrentDownloads = maxConcurrentDownloads
+    this.webContents = webContents
   }
 
   async download(task: IDownloadVideoFile): Promise<void> {
@@ -45,12 +50,30 @@ class DownloadManager {
 
       const progressStream = progress({
         length: parseInt(contentLength, 10),
-        time: 500
+        time: 300
       })
 
-      //@ts-ignore
+      this.webContents.send(IpcEvents.APP_ITEM_DOWNLOADING, { ...task })
+
       progressStream.on('progress', progressData => {
-        // console.log(progressData)
+        task = {
+          ...task,
+          percentage: progressData.percentage,
+          length: progressData.length,
+          speed: progressData.speed,
+          transferred: progressData.transferred,
+          eta: progressData.eta
+        }
+        this.webContents.send(IpcEvents.APP_ITEM_DOWNLOAD_UPDATE, task)
+      })
+
+      progressStream.on('finish', () => {
+        task = {
+          ...task,
+          state: 'finish',
+          finishTime: _getCurrentFormattedTime()
+        }
+        this.webContents.send(IpcEvents.APP_ITEM_DOWNLOAD_FINISH, task)
       })
 
       const ext = this.getExtFromContentType(
