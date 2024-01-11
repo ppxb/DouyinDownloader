@@ -36,6 +36,7 @@ DouyinDownloader 现在支持通过简单的GUI交互下载抖音无水印视频
 > 在下载前请保证正确设置了 Cookie，否则将无法正确的解析资源。
 
 ![设置 Cookie](https://github.com/ppxb/DouyinDownloader/blob/master/screenshots/setcookie.png?raw=true)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fppxb%2FDouyinDownloader.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fppxb%2FDouyinDownloader?ref=badge_shield)
 
 主界面
 
@@ -88,3 +89,6 @@ $ pnpm build:linux
 ## 📃 License
 
 MIT © [ppxb](https://github.com/ppxb/DouyinDownloader/blob/master/LICENSE)
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fppxb%2FDouyinDownloader.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fppxb%2FDouyinDownloader?ref=badge_large)
