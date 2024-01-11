@@ -1,12 +1,8 @@
-import fs from 'fs'
+import { createWriteStream } from 'fs'
+import axios from 'axios'
 import progress from 'progress-stream'
-import { Response } from 'node-fetch'
 
 import { IDownloadVideoFile } from '../../common/types'
-
-const fetch = (...args: [RequestInfo, RequestInit?]) =>
-  //@ts-ignore
-  import('node-fetch').then(({ default: fetch }) => fetch(...args))
 
 class DownloadManager {
   private maxConcurrentDownloads: number
@@ -34,39 +30,43 @@ class DownloadManager {
   }
 
   private async downloadFile(task: IDownloadVideoFile) {
-    const response: Response = await fetch(task.url, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/octet-stream' }
-    })
-    if (!response.ok) {
-      throw new Error(`Unexpected response ${response.statusText}`)
+    try {
+      const response = await axios({
+        url: task.url,
+        method: 'GET',
+        headers: { 'Content-Type': 'application/octet-stream' },
+        responseType: 'stream'
+      })
+
+      const contentLength = response.headers['content-length']
+      if (contentLength === null) {
+        throw new Error('Response size header not found')
+      }
+
+      const progressStream = progress({
+        length: parseInt(contentLength, 10),
+        time: 500
+      })
+
+      //@ts-ignore
+      progressStream.on('progress', progressData => {
+        // console.log(progressData)
+      })
+
+      const ext = this.getExtFromContentType(
+        response.headers['contentType'] || ''
+      )
+      const savePath = `${task.folder}\\${task.name}${ext}`
+      const fileStream = createWriteStream(savePath)
+
+      return new Promise((resolve, reject) => {
+        response.data.pipe(progressStream).pipe(fileStream)
+        fileStream.on('finish', resolve)
+        fileStream.on('error', reject)
+      })
+    } catch (error) {
+      return Promise.reject(error)
     }
-
-    const contentLength = response.headers.get('content-length')
-    if (contentLength === null) {
-      throw new Error('Response size header not found')
-    }
-
-    const progressStream = progress({
-      length: parseInt(contentLength, 10),
-      time: 100
-    })
-
-    // progressStream.on('progress', progressData => {
-    //   console.log(progressData)
-    // })
-
-    const ext = this.getExtFromContentType(
-      response.headers.get('contentType') || ''
-    )
-    const savePath = `${task.folder}\\${task.name}${ext}`
-    const fileStream = fs.createWriteStream(savePath)
-    response.body?.pipe(progressStream).pipe(fileStream)
-
-    return new Promise((resolve, reject) => {
-      fileStream.on('finish', resolve)
-      fileStream.on('error', reject)
-    })
   }
 
   private getExtFromContentType(contentType: string): string {

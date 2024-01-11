@@ -33,6 +33,7 @@ export const _handleNewDownload = (
   data: IVideoDownloadFilePreview[]
 ) => {
   const { state } = JSON.parse(store.get('app') as string) as App
+
   data.forEach(item => {
     const newFileName = _formatFileName(state.fileNameFormat, item)
     const folder = _createFolder(_generateDownloadFolder())

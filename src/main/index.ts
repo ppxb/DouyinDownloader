@@ -47,7 +47,9 @@ const createWindow = (): BrowserWindow => {
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
+    mainWindow.loadFile(join(__dirname, '../renderer/index.html'), {
+      hash: '/'
+    })
   }
   return mainWindow
 }
@@ -64,30 +66,30 @@ const initApp = () => {
         mainWindow.focus()
       }
     })
+
+    app.whenReady().then(() => {
+      electronApp.setAppUserModelId('douyin-downloader')
+
+      app.on('browser-window-created', (_, win) => {
+        optimizer.watchWindowShortcuts(win)
+      })
+
+      // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils#optimizer
+      // optimizer.registerFramelessWindowIpc()
+
+      createWindow()
+
+      registerIpc()
+
+      app.on('activate', () => {
+        if (BrowserWindow.getAllWindows().length === 0) createWindow()
+      })
+    })
+
+    app.on('window-all-closed', () => {
+      if (process.platform !== 'darwin') app.quit()
+    })
   }
-
-  app.whenReady().then(() => {
-    electronApp.setAppUserModelId('douyin-downloader')
-
-    app.on('browser-window-created', (_, win) => {
-      optimizer.watchWindowShortcuts(win)
-    })
-
-    // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils#optimizer
-    // optimizer.registerFramelessWindowIpc()
-
-    createWindow()
-
-    registerIpc()
-
-    app.on('activate', () => {
-      if (BrowserWindow.getAllWindows().length === 0) createWindow()
-    })
-  })
-
-  app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') app.quit()
-  })
 }
 
 initApp()

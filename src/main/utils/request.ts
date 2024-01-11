@@ -1,22 +1,22 @@
 import axios, { AxiosRequestConfig, AxiosError } from 'axios'
-import Store from 'electron-store'
+
+import { store } from '../ipc/store'
+import { App } from '../../common/types'
 
 export enum RequestEnum {
   GET = 'GET',
   POST = 'POST'
 }
 
-const store = new Store()
-
 const createInstance = () => {
   const instance = axios.create()
 
   instance.interceptors.request.use(
     async config => {
-      const app = store.get('app')
-      if (!app) throw new Error('未找到 Cookie,请前往设置页面配置 Cookie')
+      const { state } = JSON.parse(store.get('app') as string) as App
+      if (!state) throw new Error('未找到 Cookie,请前往设置页面配置 Cookie')
 
-      const { cookie } = JSON.parse(app as string).state
+      const { cookie } = state
       if (!cookie) throw new Error('未找到 Cookie,请前往设置页面配置 Cookie')
 
       if (cookie && !config.headers.Cookie) config.headers.Cookie = cookie
