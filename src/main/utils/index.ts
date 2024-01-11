@@ -15,8 +15,10 @@ export const _formatFileName = (
 
 const pathJoin = (...p: string[]): string => path.join(...p)
 
-export const _generateDownloadFolder = () =>
-  new Date().toISOString().slice(0, 10)
+export const _generateDownloadFolder = () => {
+  const dateTime = new Date(+new Date() + 8 * 60 * 60 * 1000)
+  return new Date(dateTime).toISOString().slice(0, 10)
+}
 
 export const _createFolder = (folder: string): string => {
   const { state } = JSON.parse(store.get('app') as string) as App
