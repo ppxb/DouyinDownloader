@@ -33,6 +33,7 @@ const DownloadPage = () => {
     if (index < 0) {
       downloadItemRef.current.unshift(item)
     } else {
+      if (downloadItemRef.current[index].state === 'finish') return
       downloadItemRef.current[index] = item
     }
 
@@ -41,7 +42,7 @@ const DownloadPage = () => {
 
   useEffect(() => {
     listenerNewDownloadItem((_, item) => {
-      if (!downloadItemRef.current.map(i => i.id === item.id).length) {
+      if (!downloadItemRef.current.filter(i => i.id === item.id).length) {
         downloadItemRef.current.push(item)
       }
       handleUpdateData(item)
