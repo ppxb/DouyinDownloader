@@ -33,6 +33,7 @@ export interface IVideoDownloadFilePreview {
   cover: string
   width: number
   height: number
+  ratio: string
 }
 
 export interface IDownloadVideoFile extends IVideoDownloadFilePreview {

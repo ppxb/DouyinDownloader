@@ -68,7 +68,8 @@ const getVideoData = (details: PromiseFulfilledResult<any>[]) => {
         size: i['aweme_detail']['video']['play_addr']['data_size'],
         cover: i['aweme_detail']['video']['cover']['url_list'][0],
         width: i['aweme_detail']['video']['play_addr']['width'],
-        height: i['aweme_detail']['video']['play_addr']['height']
+        height: i['aweme_detail']['video']['play_addr']['height'],
+        ratio: i['aweme_detail']['video']['ratio']
       } as IVideoDownloadFilePreview
     })
 }

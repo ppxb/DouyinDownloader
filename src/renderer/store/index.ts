@@ -6,7 +6,6 @@ import { IpcEvents } from '@common/ipcEvents'
 import createSelectors from './selectors'
 
 export type Theme = 'light' | 'dark' | 'system'
-export type Quality = '1080P' | '720P' | '480P'
 export type Language = '简体中文' | '繁體中文' | 'English'
 
 type State = {
@@ -14,7 +13,7 @@ type State = {
   theme: Theme
   language: Language
   dir: string
-  quality: Quality
+  concurrent: string
   folderNameFormat: string
   fileNameFormat: string
 }
@@ -24,7 +23,7 @@ type Actions = {
   updateTheme: (theme: Theme) => void
   updateLanguage: (language: Language) => void
   updateDir: (dir: string) => void
-  updateQuality: (quality: Quality) => void
+  updateConcurrent: (concurrent: string) => void
   updateFolderNameFormat: (format: string) => void
   updateFileNameFormat: (format: string) => void
 }
@@ -51,7 +50,7 @@ const initialState: State = {
   dir: await window.electron.ipcRenderer.invoke(
     IpcEvents.APP_DEFAULT_DOWNLOAD_DIRECTORY
   ),
-  quality: '1080P',
+  concurrent: '5',
   folderNameFormat: '{date}',
   fileNameFormat: '{author}-{title}-{time}'
 }
@@ -64,7 +63,7 @@ const appStore = create<State & Actions>()(
       updateTheme: (theme: Theme) => set({ theme }),
       updateLanguage: (language: Language) => set({ language }),
       updateDir: (dir: string) => set({ dir }),
-      updateQuality: (quality: Quality) => set({ quality }),
+      updateConcurrent: (concurrent: string) => set({ concurrent }),
       updateFolderNameFormat: (format: string) =>
         set({ folderNameFormat: format }),
       updateFileNameFormat: (format: string) => set({ fileNameFormat: format }),

@@ -12,7 +12,7 @@ import {
   Tooltip
 } from '@nextui-org/react'
 
-import useAppStore, { Language, Quality, Theme } from '@renderer/store'
+import useAppStore, { Language, Theme } from '@renderer/store'
 import { ReloadIcon, KeyIcon, FolderIcon } from '@renderer/components/icon'
 
 import { IpcEvents } from '@common/ipcEvents'
@@ -20,12 +20,11 @@ import { IpcEvents } from '@common/ipcEvents'
 const SettingsView = () => {
   const themeList = ['light', 'dark', 'system']
   const languageList = ['简体中文', '繁體中文', 'English']
-  const qualityList = ['1080P', '720P', '480P']
 
   const {
     cookie,
     updateCookie,
-    quality,
+    concurrent,
     language,
     theme,
     folderNameFormat,
@@ -36,7 +35,7 @@ const SettingsView = () => {
 
   const dir = useAppStore.use.dir()
   const updateDir = useAppStore.use.updateDir()
-  const updateQuality = useAppStore.use.updateQuality()
+  const updateConcurrent = useAppStore.use.updateConcurrent()
   const updateLanguage = useAppStore.use.updateLanguage()
   const updateTheme = useAppStore.use.updateTheme()
 
@@ -49,8 +48,8 @@ const SettingsView = () => {
     )
   }
 
-  const handleQualityChange = (e: ChangeEvent<HTMLSelectElement>) =>
-    updateQuality(e.target.value as Quality)
+  const handleConcurrentChange = (e: ChangeEvent<HTMLSelectElement>) =>
+    updateConcurrent(e.target.value)
 
   const handleThemeChange = (e: ChangeEvent<HTMLSelectElement>) =>
     updateTheme(e.target.value as Theme)
@@ -229,23 +228,23 @@ const SettingsView = () => {
           <Divider />
           <CardBody className="flex flex-row items-center px-5">
             <div className="flex flex-col">
-              <div className="text-sm font-bold mb-1">视频清晰度</div>
+              <div className="text-sm font-bold mb-1">最大下载数量</div>
               <div className="text-tiny text-foreground/50">
-                将会选择最匹配设置的清晰度
+                同时下载的视频数量
               </div>
             </div>
             <Select
               size="sm"
               radius="lg"
-              selectedKeys={[quality()]}
-              onChange={handleQualityChange}
-              aria-label="Select video quality"
+              aria-label="Select concurrent download items"
+              selectedKeys={[concurrent()]}
+              onChange={handleConcurrentChange}
               className="ml-auto max-w-32"
               classNames={{
                 trigger: 'min-h-unit-0 h-8'
               }}
             >
-              {qualityList.map(q => (
+              {['1', '2', '3', '4', '5'].map(q => (
                 <SelectItem key={q} value={q}>
                   {q}
                 </SelectItem>

@@ -158,7 +158,7 @@ const LinkModal = ({ isOpen, onClose }: LinkModalProps) => {
                               className="object-cover rounded-xl"
                             />
                             <div className="flex justify-center flex-1 text-tiny">
-                              {item.width}P
+                              {item.ratio.toUpperCase()}
                             </div>
                             <div className="flex justify-center flex-1 text-tiny">
                               {formatTime(item.duration)}

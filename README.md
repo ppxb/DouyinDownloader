@@ -72,7 +72,7 @@ $ pnpm build:linux
 
 ```
 
-## ⚠️ Disclaimers
+## ⚠️ 免责声明
 
 > \[!IMPORTANT]
 >
