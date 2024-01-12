@@ -13,6 +13,8 @@ export enum IpcEvents {
   APP_ITEM_DOWNLOADING = 'app:item-downloading',
   APP_ITEM_DOWNLOAD_UPDATE = 'app:item-download-update',
   APP_ITEM_DOWNLOAD_FINISH = 'app:item-download-finish',
+  APP_ITEM_DOWNLOAD_PAUSE = 'app:item-download-pause',
+  APP_ITEM_DOWNLOAD_RESUME = 'app:item-download-resume',
 
   APP_GET_VIDEO_DOWNLOAD_DATA = 'app:get-video-download-data'
 }

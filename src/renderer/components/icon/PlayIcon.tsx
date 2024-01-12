@@ -8,9 +8,9 @@ export const PlayIcon = props => (
   >
     <path
       fill="currentColor"
-      fill-rule="evenodd"
+      fillRule="evenodd"
       d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2S2 6.477 2 12s4.477 10 10 10"
-      clip-rule="evenodd"
+      clipRule="evenodd"
       opacity=".5"
     />
     <path

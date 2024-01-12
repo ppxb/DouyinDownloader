@@ -19,3 +19,6 @@ export const formatEta = (eta: number) => {
 export const formatSize = (size: number) => {
   return (size / 1024 / 1024).toFixed(2)
 }
+
+export const formatSpeed = (speed: number): string =>
+  speed / 1024 < 1024 ? `${speed} Kb` : `${(speed / 1024 / 1024).toFixed(2)} Mb`

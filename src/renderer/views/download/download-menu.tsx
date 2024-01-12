@@ -55,7 +55,7 @@ const DownloadMenu = ({ openLinkModal }: DownloadMenuProps) => {
   ]
 
   return (
-    <div className="absolute right-16 bottom-16">
+    <div className="absolute right-24 bottom-24">
       <Dropdown>
         <DropdownTrigger>
           <Button isIconOnly radius="lg" variant="flat">

@@ -45,6 +45,7 @@ const LinkModal = ({ isOpen, onClose }: LinkModalProps) => {
       setUrls('')
     } else {
       setSelected('input')
+      setList([])
     }
   }
 
