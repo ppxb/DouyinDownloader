@@ -24,7 +24,7 @@ const DownloadingItem = ({ item }: DownloadingItemProps) => {
               </div>
             </Tooltip>
             <div className="flex items-center gap-2">
-              <div className="text-tiny text-default-500"> {item.ratio}</div>
+              <div className="text-tiny text-default-500">{item.ratio}</div>
               <Divider orientation="vertical" className="h-3" />
               <div className="text-tiny text-default-500">
                 {formatSize(item.size)} MB

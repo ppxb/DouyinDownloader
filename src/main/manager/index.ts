@@ -36,14 +36,14 @@ class DownloadManager {
 
   private async downloadFile(task: IDownloadVideoFile) {
     try {
-      const response = await axios({
+      const { data, headers } = await axios({
         url: task.url,
         method: 'GET',
         headers: { 'Content-Type': 'application/octet-stream' },
         responseType: 'stream'
       })
 
-      const contentLength = response.headers['content-length']
+      const contentLength = headers['content-length']
       if (contentLength === null) {
         throw new Error('Response size header not found')
       }
@@ -76,14 +76,12 @@ class DownloadManager {
         this.webContents.send(IpcEvents.APP_ITEM_DOWNLOAD_FINISH, task)
       })
 
-      const ext = this.getExtFromContentType(
-        response.headers['contentType'] || ''
-      )
+      const ext = this.getExtFromContentType(headers['contentType'] || '')
       const savePath = `${task.folder}\\${task.name}${ext}`
       const fileStream = createWriteStream(savePath)
 
       return new Promise((resolve, reject) => {
-        response.data.pipe(progressStream).pipe(fileStream)
+        data.pipe(progressStream).pipe(fileStream)
         fileStream.on('finish', resolve)
         fileStream.on('error', reject)
       })
