@@ -11,6 +11,11 @@ interface DownloadedItemProps {
 }
 
 const DownloadedItem = ({ item }: DownloadedItemProps) => {
+  const handleOpenFolder = (item: IDownloadVideoFile) => {
+    console.log(123)
+    window.electron.ipcRenderer.send('app:open-download-folder', item.folder)
+  }
+
   return (
     <div className="flex flex-col">
       <Card key={item.id} className="mb-2">
@@ -26,7 +31,10 @@ const DownloadedItem = ({ item }: DownloadedItemProps) => {
           <div className="text-tiny">{formatSize(item.length)}M</div>
           <div className="text-tiny">{item.finishTime}</div>
           <div className="flex gap-2">
-            <OpenFolderIcon className="hover:cursor-pointer" />
+            <OpenFolderIcon
+              className="hover:cursor-pointer"
+              onClick={() => handleOpenFolder(item)}
+            />
           </div>
         </CardBody>
       </Card>

@@ -16,5 +16,7 @@ export enum IpcEvents {
   APP_ITEM_DOWNLOAD_PAUSE = 'app:item-download-pause',
   APP_ITEM_DOWNLOAD_RESUME = 'app:item-download-resume',
 
-  APP_GET_VIDEO_DOWNLOAD_DATA = 'app:get-video-download-data'
+  APP_GET_VIDEO_DOWNLOAD_DATA = 'app:get-video-download-data',
+
+  APP_OPEN_DOWNLOAD_FOLDER = 'app:open-download-folder'
 }

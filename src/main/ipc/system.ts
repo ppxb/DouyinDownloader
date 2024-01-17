@@ -1,4 +1,4 @@
-import { app, dialog, ipcMain, shell } from 'electron'
+import { IpcMainEvent, app, dialog, ipcMain, shell } from 'electron'
 
 import { IpcEvents } from '../../common/ipcEvents'
 
@@ -13,6 +13,11 @@ export const registerSystemIpc = () => {
 
   ipcMain.handle(IpcEvents.APP_SET_DOWNLOAD_DIRECTORY, (_, oldPath?: string) =>
     _handleSetDownloadDirectory(oldPath)
+  )
+
+  ipcMain.on(
+    IpcEvents.APP_OPEN_DOWNLOAD_FOLDER,
+    (_: IpcMainEvent, folder: string) => shell.openPath(folder)
   )
 }
 

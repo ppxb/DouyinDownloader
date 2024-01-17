@@ -36,3 +36,7 @@ export const listenerDownloadItemUpdate = (
 export const listenerDownloadItemFinish = (
   cb: (event: IpcRendererEvent, ...args: any[]) => void
 ) => ipcRendererOn(IpcEvents.APP_ITEM_DOWNLOAD_FINISH, cb)
+
+export const openDownloadItemFolder = (
+  cb: (event: IpcRendererEvent, ...args: any[]) => void
+) => ipcRendererOn(IpcEvents.APP_OPEN_DOWNLOAD_FOLDER, cb)

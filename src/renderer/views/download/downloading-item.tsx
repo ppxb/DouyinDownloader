@@ -2,7 +2,7 @@ import { Card, CardBody, Divider, Tooltip, Progress } from '@nextui-org/react'
 
 import { IDownloadVideoFile } from '@common/types'
 import { formatEta, formatSize, formatSpeed } from '@renderer/utils'
-import { PauseIcon, DeleteIcon, PlayIcon } from '@renderer/components/icon'
+// import { PauseIcon, DeleteIcon, PlayIcon } from '@renderer/components/icon'
 
 interface DownloadingItemProps {
   item: IDownloadVideoFile
@@ -43,7 +43,7 @@ const DownloadingItem = ({ item }: DownloadingItemProps) => {
             value={item.percentage}
             showValueLabel={true}
           />
-          <div className="flex gap-2">
+          {/* <div className="flex gap-2">
             {item.state === 'progressing' ? (
               <PauseIcon className="hover:cursor-pointer" />
             ) : (
@@ -51,7 +51,7 @@ const DownloadingItem = ({ item }: DownloadingItemProps) => {
             )}
 
             <DeleteIcon className="text-red-500 hover:cursor-pointer" />
-          </div>
+          </div> */}
         </CardBody>
       </Card>
     </div>
