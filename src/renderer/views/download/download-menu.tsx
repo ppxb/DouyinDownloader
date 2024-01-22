@@ -18,9 +18,13 @@ import {
 
 interface DownloadMenuProps {
   openLinkModal: () => void
+  openAccountModal: () => void
 }
 
-const DownloadMenu = ({ openLinkModal }: DownloadMenuProps) => {
+const DownloadMenu = ({
+  openLinkModal,
+  openAccountModal
+}: DownloadMenuProps) => {
   const menus = [
     {
       name: '链接下载',
@@ -32,7 +36,7 @@ const DownloadMenu = ({ openLinkModal }: DownloadMenuProps) => {
       name: '账号作品下载',
       startContent: <AccountIcon className="icon-default" />,
       shortcut: 'Ctrl + A',
-      onPress: () => {}
+      onPress: openAccountModal
     },
     {
       name: '图集下载',

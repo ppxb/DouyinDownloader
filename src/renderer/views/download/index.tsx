@@ -18,11 +18,14 @@ import {
 import { IDownloadVideoFile } from '@common/types'
 
 import LinkModal from './link-modal'
+import AccountModal from './account-modal'
 import DownloadMenu from './download-menu'
 import DownloadContent from './download-content'
 
 const DownloadPage = () => {
   const linkModalRef = useDisclosure()
+  const accountModalRef = useDisclosure()
+
   const [downloadItem, setDownloadItem] = useState<IDownloadVideoFile[]>([])
 
   const downloadItemRef = useRef<IDownloadVideoFile[]>([])
@@ -58,10 +61,13 @@ const DownloadPage = () => {
   }, [handleUpdateData])
 
   useEffect(() => {
-    hotKeys('ctrl+n', (_, handler) => {
+    hotKeys('ctrl+n,ctrl+a', (_, handler) => {
       switch (handler.key) {
         case 'ctrl+n':
           linkModalRef.onOpen()
+          break
+        case 'ctrl+a':
+          // accountModalRef.onOpen()
           break
       }
     })
@@ -116,8 +122,15 @@ const DownloadPage = () => {
           </Tabs>
         </CardBody>
       </Card>
-      <DownloadMenu openLinkModal={linkModalRef.onOpen} />
+      <DownloadMenu
+        openLinkModal={linkModalRef.onOpen}
+        openAccountModal={accountModalRef.onOpen}
+      />
       <LinkModal isOpen={linkModalRef.isOpen} onClose={linkModalRef.onClose} />
+      <AccountModal
+        isOpen={accountModalRef.isOpen}
+        onClose={accountModalRef.onClose}
+      />
     </>
   )
 }
